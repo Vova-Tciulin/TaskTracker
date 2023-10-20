@@ -1,0 +1,18 @@
+﻿version: '3.4'
+
+services:
+  portainer:
+    image: portainer/portainer-ce
+  
+  tasksDb:
+    image: mongo
+  
+  tasks.cmd.api:
+    image: tasks.cmd.api
+    build:
+      context: .
+      dockerfile: src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Api/Dockerfile
+
+volumes:
+  tasksDb_data:
+  portainer_data:

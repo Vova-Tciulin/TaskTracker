@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+  
+  tasksDb:
+    container_name: tasksDb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - tasksDb_data:/data/db
+        
+  tasks.cmd.api:
+    container_name: tasks.cmd.api
+    ports:
+      - "8001:80"
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "DatabaseSettings:ConnectionString=mongodb://tasksDb:27017"
+    depends_on: 
+      - tasksDb
+      
