@@ -4,35 +4,29 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>422c2be1-d7ad-448d-b36e-da524dd51eae</UserSecretsId>
+        <RootNamespace>Task.Query.Api</RootNamespace>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MassTransit" Version="8.1.1" />
-        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Tasks.Cmd.Infrastructure\Tasks.Cmd.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Tasks.Common\Tasks.Common.csproj" />
-      <ProjectReference Include="..\Tasks.Cmd.Application\Tasks.Cmd.Application.csproj" />
-      <ProjectReference Include="..\Tasks.Cmd.Domain\Tasks.Cmd.Domain.csproj" />
+      <ProjectReference Include="..\Tasks.Query.Application\Tasks.Query.Application.csproj" />
+      <ProjectReference Include="..\Tasks.Query.Infrastructure\Tasks.Query.Infrastructure.csproj" />
     </ItemGroup>
-
 
     <ItemGroup>
       <Content Include="..\..\..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
-
-
-
-
-    
 
 </Project>

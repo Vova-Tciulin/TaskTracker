@@ -8,7 +8,7 @@ namespace Tasks.Cmd.Infrastructure.Repositories;
 
 public class TaskEventRepository:ITaskEventRepository
 {
-    private ITaskDbContext _db;
+    private readonly ITaskDbContext _db;
     private readonly ILogger<TaskEventRepository> _logger;
 
     public TaskEventRepository(ITaskDbContext db, ILogger<TaskEventRepository> logger)

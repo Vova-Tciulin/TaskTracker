@@ -6,36 +6,21 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-
     <ItemGroup>
-      <ProjectReference Include="..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
-      <ProjectReference Include="..\TasksServices\Tasks.Cmd\Tasks.Cmd.Domain\Tasks.Cmd.Domain.csproj" />
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
+      <ProjectReference Include="..\..\Tasks.Common\Tasks.Common.csproj" />
+      <ProjectReference Include="..\Tasks.Query.Domain\Tasks.Query.Domain.csproj" />
     </ItemGroup>
-
-
-
 
     <ItemGroup>
       <PackageReference Include="MassTransit" Version="8.1.1" />
       <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
       <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1" />
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-      <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
-
-
-
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
 
     </ItemGroup>
-
-
-
-
-
-
-
-
-
 
 
 

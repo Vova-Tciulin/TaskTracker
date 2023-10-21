@@ -4,15 +4,28 @@ services:
   portainer:
     image: portainer/portainer-ce
   
-  tasksDb:
+  tasksEventDb:
     image: mongo
+  
+  tasksDb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+  
+  rabbitmq:
+    image: rabbitmq:3-management
   
   tasks.cmd.api:
     image: tasks.cmd.api
     build:
       context: .
       dockerfile: src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Api/Dockerfile
+      
+  tasks.query.api:
+    image: tasks.query.api
+    build: 
+      context: .
+      dockerfile: src/services/TasksServices/Tasks.Query/Tasks.Query.Api/Dockerfile
 
 volumes:
-  tasksDb_data:
+  tasksEventDb_data:
   portainer_data:
+  task-data:

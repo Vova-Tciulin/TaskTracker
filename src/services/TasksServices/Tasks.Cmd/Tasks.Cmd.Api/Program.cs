@@ -1,3 +1,4 @@
+using MassTransit;
 using Tasks.Cmd.Api.Extensions;
 using Tasks.Cmd.Application;
 using Tasks.Cmd.Infrastructure;

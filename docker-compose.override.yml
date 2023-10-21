@@ -11,21 +11,55 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
   
-  tasksDb:
-    container_name: tasksDb
+  tasksEventDb:
+    container_name: tasksEventDb
     restart: always
     ports:
       - "27017:27017"
     volumes:
-      - tasksDb_data:/data/db
+      - tasksEventDb_data:/data/db
         
+  tasksDb:
+    container_name: tasksDb
+    environment:
+      SA_PASSWORD: yourStrongPassword123
+      ACCEPT_EULA: Y
+    restart: always
+    ports:
+      - "1434:1433"
+    volumes:
+      - task-data:/var/opt/mssql
+    
+  rabbitmq:
+    container_name: rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  
+  
   tasks.cmd.api:
     container_name: tasks.cmd.api
     ports:
       - "8001:80"
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
-      - "DatabaseSettings:ConnectionString=mongodb://tasksDb:27017"
+      - "DatabaseSettings:ConnectionString=mongodb://tasksEventDb:27017"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on: 
+      - tasksEventDb
+      - rabbitmq
+    
+  tasks.query.api:
+    container_name: tasks.query.api
+    ports:
+      - "8002:80"
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - ConnectionStrings__DefaultConnection=Server=tasksDb;Database=TaskDb;User=sa;Password=yourStrongPassword123;Encrypt=False;
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
       - tasksDb
+      - rabbitmq
+        
       

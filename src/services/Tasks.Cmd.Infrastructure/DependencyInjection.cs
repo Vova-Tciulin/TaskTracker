@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tasks.Cmd.Domain.Aggregates;
@@ -16,6 +17,15 @@ public static class DependencyInjection
         services.AddScoped<ITaskDbContext, TaskDbContext>();
         services.AddScoped<IEventStore, EventStore>();
         services.AddScoped<ITaskEventRepository, TaskEventRepository>();
+        
+        //Add MassTransit
+        services.AddMassTransit(u =>
+        {
+            u.UsingRabbitMq((ctx, cfg) =>
+            {
+                cfg.Host(configuration["EventBusSettings:HostAddress"]);
+            });
+        });
         
         return services;
     }

@@ -1,4 +1,7 @@
 ﻿using System.Text.Json;
+using EventBus.Messages.Messages;
+using MassTransit;
+using MassTransit.Testing;
 using Microsoft.Extensions.Logging;
 using Tasks.Cmd.Domain.Aggregates;
 using Tasks.Cmd.Domain.Exceptions;
@@ -12,11 +15,13 @@ public class EventStore:IEventStore
 {
     private readonly ITaskEventRepository _taskRepository;
     private readonly ILogger<EventStore> _logger;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public EventStore(ITaskEventRepository taskRepository, ILogger<EventStore> logger)
+    public EventStore(ITaskEventRepository taskRepository, ILogger<EventStore> logger, IPublishEndpoint publishEndpoint)
     {
         _taskRepository = taskRepository;
         _logger = logger;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task SaveEventsAsync(Guid aggregateId, IEnumerable<BaseEvent> events, int expectedVersion)
@@ -47,9 +52,15 @@ public class EventStore:IEventStore
 
             _logger.LogInformation($"Save event {@event.Type} in Db");
             await _taskRepository.SaveAsync(model);
+
+            var message = new BaseMessage()
+            {
+                Type = @event.GetType().ToString(),
+                Message = JsonSerializer.Serialize(@event, @event.GetType())
+            };
             
-            _logger.LogInformation($"Send event {@event.Type} in rabbitMq");
-            //TODO: необходимо добавить отправку события в RabbitMQ 
+            _logger.LogInformation($"Publish message in rabbitMQ. Message: {JsonSerializer.Serialize(message)}");
+            await _publishEndpoint.Publish(message);
         }
     }
 
