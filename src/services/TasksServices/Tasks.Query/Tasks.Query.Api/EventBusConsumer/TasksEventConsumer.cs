@@ -8,7 +8,7 @@ namespace Task.Query.Api.EventBusConsumer;
 
 using System.Threading.Tasks;
 
-public class TasksEventConsumer:IConsumer<BaseMessage>
+public class TasksEventConsumer:IConsumer<EventMessage>
 {
     private readonly ILogger<TasksEventConsumer> _logger;
     private readonly IEventHandlers _eventHandler;
@@ -19,60 +19,65 @@ public class TasksEventConsumer:IConsumer<BaseMessage>
         _eventHandler = eventHandler;
     }
 
-    public async Task Consume(ConsumeContext<BaseMessage> context)
+    public async Task Consume(ConsumeContext<EventMessage> context)
     {
-        _logger.LogInformation($"Received event: {@context.Message.Type}");
+        _logger.LogInformation($"Received event: {@context.Message.EventType}");
 
-        switch (context.Message.Type)
+        switch (context.Message.EventType)
         {
-            case "Tasks.Common.Events.TaskCreatedEvent":
+            case "TaskCreatedEvent":
             {
                 var @event = JsonSerializer.Deserialize<TaskCreatedEvent>(context.Message.Message);
-                _logger.LogInformation($"events: {JsonSerializer.Serialize(@event)}");
                 await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
             
-            case "Tasks.Common.Events.TaskCompletedEvent":
+            case "TaskCompletedEvent":
             {
                 var @event = JsonSerializer.Deserialize<TaskCompletedEvent>(context.Message.Message);
-                _logger.LogInformation($"events: {JsonSerializer.Serialize(@event)}");
+                
                 await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
-            case "Tasks.Common.Events.TaskRemovedEvent":
+            case "TaskRemovedEvent":
             {
                 var @event = JsonSerializer.Deserialize<TaskRemovedEvent>(context.Message.Message);
-                _logger.LogInformation($"events: {JsonSerializer.Serialize(@event)}");
+                
                 await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
-            case "Tasks.Common.Events.TaskTakenOnWorkEvent":
+            case "TaskTakenOnWorkEvent":
             {
                 var @event = JsonSerializer.Deserialize<TaskTakenOnWorkEvent>(context.Message.Message);
-                _logger.LogInformation($"events: {JsonSerializer.Serialize(@event)}");
+                
                 await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
-            case "Tasks.Common.Events.TaskUpdatedDeadlineEvent":
+            case "TaskUpdatedDeadlineEvent":
             {
                 var @event = JsonSerializer.Deserialize<TaskUpdatedDeadlineEvent>(context.Message.Message);
-                _logger.LogInformation($"events: {JsonSerializer.Serialize(@event)}");
+               
                 await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
             
-            case "Tasks.Common.Events.TaskUpdatedTaskEvent":
+            case "TaskUpdatedTaskEvent":
             {
                 var @event = JsonSerializer.Deserialize<TaskUpdatedTaskEvent>(context.Message.Message);
-                _logger.LogInformation($"events: {JsonSerializer.Serialize(@event)}");
+                
                 await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
 
             default:
             {
-                _logger.LogWarning($"{@context.Message.Type} doesn't supported");
+                _logger.LogWarning($"{@context.Message.EventType} doesn't supported");
                 break;
             }
         }

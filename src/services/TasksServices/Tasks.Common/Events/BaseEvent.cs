@@ -6,7 +6,7 @@ public abstract class BaseEvent
     public string Type { get; set; }
     public int Version { get; set; }
 
-    public BaseEvent(string type)
+    protected BaseEvent(string type)
     {
         Type = type;
     }

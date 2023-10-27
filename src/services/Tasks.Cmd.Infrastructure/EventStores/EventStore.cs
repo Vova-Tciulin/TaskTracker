@@ -7,6 +7,7 @@ using Tasks.Cmd.Domain.Aggregates;
 using Tasks.Cmd.Domain.Exceptions;
 using Tasks.Cmd.Domain.Models;
 using Tasks.Cmd.Infrastructure.Contracts;
+using Tasks.Cmd.Infrastructure.Producers;
 using Tasks.Common.Events;
 
 namespace Tasks.Cmd.Infrastructure.EventStores;
@@ -14,14 +15,15 @@ namespace Tasks.Cmd.Infrastructure.EventStores;
 public class EventStore:IEventStore
 {
     private readonly ITaskEventRepository _taskRepository;
+    private readonly IProducer _producer;
     private readonly ILogger<EventStore> _logger;
-    private readonly IPublishEndpoint _publishEndpoint;
+    
 
-    public EventStore(ITaskEventRepository taskRepository, ILogger<EventStore> logger, IPublishEndpoint publishEndpoint)
+    public EventStore(ITaskEventRepository taskRepository, ILogger<EventStore> logger, IProducer producer)
     {
         _taskRepository = taskRepository;
         _logger = logger;
-        _publishEndpoint = publishEndpoint;
+        _producer = producer;
     }
 
     public async Task SaveEventsAsync(Guid aggregateId, IEnumerable<BaseEvent> events, int expectedVersion)
@@ -52,15 +54,8 @@ public class EventStore:IEventStore
 
             _logger.LogInformation($"Save event {@event.Type} in Db");
             await _taskRepository.SaveAsync(model);
-
-            var message = new BaseMessage()
-            {
-                Type = @event.GetType().ToString(),
-                Message = JsonSerializer.Serialize(@event, @event.GetType())
-            };
             
-            _logger.LogInformation($"Publish message in rabbitMQ. Message: {JsonSerializer.Serialize(message)}");
-            await _publishEndpoint.Publish(message);
+            await _producer.SendEvent(@event);
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿namespace EventBus.Messages.Messages;
 
-public class BaseMessage
+public class EventMessage
 {
+    public string EventType { get; set; }
     public string Message { get; set; }
-    public string Type { get; set; }
 }
