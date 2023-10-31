@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using Tasks.Cmd.Domain.Aggregates;
-using Tasks.Cmd.Infrastructure.Contracts;
 using Tasks.Cmd.Infrastructure.Data;
 using Tasks.Cmd.Infrastructure.EventStores;
 using Tasks.Cmd.Infrastructure.Producers;
@@ -22,20 +21,7 @@ public static class DependencyInjection
         services.AddScoped<ITaskEventRepository, TaskEventRepository>();
         services.AddScoped<IProducer, Producer>();
         
-        //Add MassTransit
-        services.AddMassTransit(u =>
-        {
-            u.UsingRabbitMq((ctx, cfg) =>
-            {
-                cfg.Host(configuration["EventBusSettings:HostAddress"]);
-                cfg.Publish<EventMessage>(x =>
-                {
-                    x.Durable = true; 
-                    x.AutoDelete = false; 
-                    x.ExchangeType = ExchangeType.Topic;
-                });
-            });
-        });
+        
         
         return services;
     }

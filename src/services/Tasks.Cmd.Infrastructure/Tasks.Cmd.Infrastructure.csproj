@@ -22,14 +22,6 @@
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
       <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
-
-
-
-
-
-
-
-
     </ItemGroup>
 
 

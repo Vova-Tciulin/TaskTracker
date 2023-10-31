@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Tasks.Cmd.Domain.Models;
-using Tasks.Cmd.Infrastructure.Contracts;
 using Tasks.Cmd.Infrastructure.Data;
 
 namespace Tasks.Cmd.Infrastructure.Repositories;
@@ -25,6 +24,5 @@ public class TaskEventRepository:ITaskEventRepository
     public async Task<List<EventModel>?> FindByAggregateId(Guid id)
     {
         return await _db.Events.Find(u => u.AggregateId == id).ToListAsync();
-        
     }
 }

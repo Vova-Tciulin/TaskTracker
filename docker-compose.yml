@@ -10,6 +10,12 @@ services:
   tasksDb:
     image: mcr.microsoft.com/mssql/server:2022-latest
   
+  groupsEventDb:
+    image: mongo    
+  
+  groupsDb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+  
   rabbitmq:
     image: rabbitmq:3-management
   
@@ -25,7 +31,21 @@ services:
       context: .
       dockerfile: src/services/TasksServices/Tasks.Query/Tasks.Query.Api/Dockerfile
 
+  groups.cmd.api:
+    image: groups.cmd.api
+    build:
+      context: .
+      dockerfile: src/services/GroupServices/Groups.Cmd/Groups.Cmd.Api/Dockerfile
+  
+  groups.query.api:
+    image: groups.query.api
+    build:
+      context: .
+      dockerfile: src/services/GroupServices/Groups.Query/Groups.Query.Api/Dockerfile
+  
 volumes:
   tasksEventDb_data:
   portainer_data:
   task-data:
+  groupsEventDb_data:
+  group-data:

@@ -43,6 +43,7 @@ builder.Services.AddMassTransit(config =>
                 x.AutoDelete = false;
                 
             });
+            
         });
     });
 });

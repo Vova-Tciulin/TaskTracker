@@ -1,7 +1,6 @@
 ﻿using Tasks.Cmd.Domain.Models;
 
-namespace Tasks.Cmd.Infrastructure.Contracts;
-using System.Threading.Tasks;
+namespace Tasks.Cmd.Infrastructure.Repositories;
 
 public interface ITaskEventRepository
 {

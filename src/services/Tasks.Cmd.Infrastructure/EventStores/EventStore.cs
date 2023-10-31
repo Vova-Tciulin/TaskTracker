@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 using Tasks.Cmd.Domain.Aggregates;
 using Tasks.Cmd.Domain.Exceptions;
 using Tasks.Cmd.Domain.Models;
-using Tasks.Cmd.Infrastructure.Contracts;
 using Tasks.Cmd.Infrastructure.Producers;
+using Tasks.Cmd.Infrastructure.Repositories;
 using Tasks.Common.Events;
 
 namespace Tasks.Cmd.Infrastructure.EventStores;

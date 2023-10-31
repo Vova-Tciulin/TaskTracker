@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit" Version="8.1.1" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
+      <ProjectReference Include="..\..\Group.Common\Group.Common.csproj" />
+      <ProjectReference Include="..\Groups.Query.Application\Groups.Query.Application.csproj" />
+      <ProjectReference Include="..\Groups.Query.Infrastructure\Groups.Query.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>

@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Tasks.Cmd.Application.EventSourcingHandlers;
-using Tasks.Cmd.Infrastructure.Contracts;
 using Tasks.Cmd.Domain.Aggregates;
 
 namespace Tasks.Cmd.Application.Features.Commands.CreateTask;

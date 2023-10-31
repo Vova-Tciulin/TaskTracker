@@ -79,18 +79,12 @@ public class TaskAggregate:AggregateRoot
         {
             throw new InvalidOperationException("Данный пользователь не является автором этой задачи!");
         }
-
-        if (_state==TaskState.InWork)
-        {
-            throw new InvalidOperationException("Задача не может быть удалена, пока находится в работе!");
-        }
-        
         if (!_isActive)
         {
             throw new InvalidOperationException("Данная задача уже удалена!");
         }
         
-        RaiseEvent(new TaskRemovedEvent(){Id = _id});
+        RaiseEvent(new TaskRemovedEvent(){Id = _id, AuthorId = authorId, GroupId = _groupId});
     }
 
     private void Apply(TaskRemovedEvent @event)

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Tasks.Cmd.Application.EventSourcingHandlers;
 using Tasks.Cmd.Application.Features.Commands.CreateTask;
 using Tasks.Cmd.Domain.Aggregates;
-using Tasks.Cmd.Infrastructure.Contracts;
 
 namespace Tasks.Cmd.Application.Features.Commands.ExecuteTask;
 

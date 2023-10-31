@@ -26,7 +26,7 @@ public class TaskController:ControllerBase
         _logger.LogInformation($"TaskId: {taskId}");
         var query = new GetTaskQuery() { TaskId = taskId };
         var task = await _mediator.Send(query);
-        _logger.LogInformation($"task: {JsonSerializer.Serialize(task)}");
+        
         return Ok(task);
     }
     
