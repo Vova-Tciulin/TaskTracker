@@ -2,6 +2,8 @@ using EventBus.Messages;
 using EventBus.Messages.Messages;
 using MassTransit;
 using RabbitMQ.Client;
+using Serilog;
+using Tasks.Cmd.Api.Configuration;
 using Tasks.Cmd.Api.EventBusConsumers;
 using Tasks.Cmd.Api.Extensions;
 using Tasks.Cmd.Application;
@@ -15,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Add Layers
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 
 //Add Automapper
@@ -24,47 +26,18 @@ builder.Services.AddAutoMapper(typeof(Program));
 //Add Middleware
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
+//Add serilog
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console());
+
 //Add MassTransit
-builder.Services.AddMassTransit(u =>
-{
-    u.AddConsumer<GroupEventConsumer>();
-    u.UsingRabbitMq((ctx, cfg) =>
-    {
-        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-        
-        
-        //Producer
-        cfg.Publish<EventMessage>(x =>
-        {
-            x.Durable = true; 
-            x.AutoDelete = false; 
-            x.ExchangeType = ExchangeType.Topic;
-        });
-        
-        //Consumers
-        cfg.UseConcurrencyLimit(1);
-        cfg.ReceiveEndpoint(EventBusConstants.TaskCmdQueue, c =>
-        {
-            c.ConfigureConsumeTopology = false;
-            c.ConfigureConsumer<GroupEventConsumer>(ctx);
-            
-            c.Bind<EventMessage>(x =>
-            {
-                x.RoutingKey = EventBusConstants.GroupRemovedEvents;
-                x.ExchangeType = ExchangeType.Topic;
-                x.Durable = true;
-                x.AutoDelete = false;
-                
-            });
-        });
-    });
-});
+builder.Services.AddMassTransit(builder.Configuration);
 
 
 var app = builder.Build();
 
-
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

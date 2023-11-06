@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Tasks.Cmd.Application.EventSourcingHandlers;
 using Tasks.Cmd.Application.Features.Commands.CreateTask;
+using Tasks.Cmd.Application.Services;
 using Tasks.Cmd.Domain.Aggregates;
 
 namespace Tasks.Cmd.Application.Features.Commands.UpdateTask;
@@ -11,11 +12,13 @@ public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
 {
     private readonly IEventSourcingHandler<TaskAggregate> _eventSourcingHandler;
     private readonly ILogger<CreateTaskCommandHandler> _logger;
+    private readonly IGroupService _groupService;
 
-    public UpdateTaskCommandHandler(IEventSourcingHandler<TaskAggregate> eventSourcingHandler, ILogger<CreateTaskCommandHandler> logger)
+    public UpdateTaskCommandHandler(IEventSourcingHandler<TaskAggregate> eventSourcingHandler, ILogger<CreateTaskCommandHandler> logger, IGroupService groupService)
     {
         _eventSourcingHandler = eventSourcingHandler;
         _logger = logger;
+        _groupService = groupService;
     }
 
     public async Task<Unit> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)

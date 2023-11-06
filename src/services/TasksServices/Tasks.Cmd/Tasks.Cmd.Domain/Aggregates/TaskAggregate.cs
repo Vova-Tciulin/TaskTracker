@@ -12,7 +12,7 @@ public class TaskAggregate:AggregateRoot
     private TaskState _state;
     private bool _isActive;
     private Guid? _workerId;
-
+    public Guid GroupId => _groupId;
 
     public TaskAggregate()
     {

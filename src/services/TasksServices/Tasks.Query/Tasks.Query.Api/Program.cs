@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using Task.Query.Api.Configuration;
 using Task.Query.Api.EventBusConsumer;
 using Task.Query.Api.Extensions;
 using Tasks.Query.Application;
@@ -22,32 +23,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 //Add massTransit
-builder.Services.AddMassTransit(config =>
-{
-    config.AddConsumer<TasksEventConsumer>();
-    config.UsingRabbitMq((context, cfg) =>
-    {
-        
-        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-        cfg.UseConcurrencyLimit(1);
-        cfg.ReceiveEndpoint(EventBusConstants.TaskQueryQueue, c =>
-        {
-            c.ConfigureConsumeTopology = false;
-            c.ConfigureConsumer<TasksEventConsumer>(context);
-            
-            c.Bind<EventMessage>(x =>
-            {
-                x.RoutingKey = EventBusConstants.TaskAllEvents;
-                x.ExchangeType = ExchangeType.Topic;
-                x.Durable = true;
-                x.AutoDelete = false;
-                
-            });
-            
-        });
-    });
-});
-
+builder.Services.AddMassTransit(builder.Configuration);
 builder.Services.AddScoped<TasksEventConsumer>();
 
 //Add middleware

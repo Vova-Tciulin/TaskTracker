@@ -1,10 +1,9 @@
-using EventBus.Messages;
-using EventBus.Messages.Messages;
+using Groups.Query.Api.Configuration;
 using Groups.Query.Api.Consumers;
+using Groups.Query.Api.Extensions;
 using Groups.Query.Application;
 using Groups.Query.Infrastructure;
-using MassTransit;
-using RabbitMQ.Client;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,37 +17,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
-//Add massTransit
-builder.Services.AddMassTransit(config =>
-{
-    config.AddConsumer<GroupsEventConsumer>();
-    config.UsingRabbitMq((context, cfg) =>
-    {
-        
-        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
-        cfg.UseConcurrencyLimit(1);
-        cfg.ReceiveEndpoint(EventBusConstants.GroupQueryQueue, c =>
-        {
-            c.ConfigureConsumeTopology = false;
-            c.ConfigureConsumer<GroupsEventConsumer>(context);
-            
-            c.Bind<EventMessage>(x =>
-            {
-                x.RoutingKey = EventBusConstants.GroupAllEvents;
-                x.ExchangeType = ExchangeType.Topic;
-                x.Durable = true;
-                x.AutoDelete = false;
-            });
-            
-        });
-    });
-});
+//Add Middleware
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
+//Add massTransit
+builder.Services.AddMassTransit(builder.Configuration);
 builder.Services.AddScoped<GroupsEventConsumer>();
 
 var app = builder.Build();
 
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

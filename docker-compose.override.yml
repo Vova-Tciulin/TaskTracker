@@ -63,11 +63,13 @@ services:
       - "8001:80"
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
+      - "Services:GroupQueryUrl=http://groups.query.api:80"
       - "DatabaseSettings:ConnectionString=mongodb://tasksEventDb:27017"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
       - tasksEventDb
       - rabbitmq
+      - groups.query.api
     
   tasks.query.api:
     container_name: tasks.query.api
