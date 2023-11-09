@@ -16,6 +16,7 @@ public static class DependencyInjection
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddSingleton(configuration);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddScoped<IEventSourcingHandler<TaskAggregate>, EventSourcingHandler>();
         //services.AddScoped<IGroupService, GroupService>();

@@ -33,6 +33,14 @@ builder.Host.UseSerilog((ctx, lc) => lc
 //Add MassTransit
 builder.Services.AddMassTransit(builder.Configuration);
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.Authority = builder.Configuration["Services:IdentityServerUrl"];
+        opt.Audience = "taskCmdApi";
+    });
+
 
 var app = builder.Build();
 
@@ -46,6 +54,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
 namespace Tasks.Cmd.Application.Extensions;
@@ -12,6 +13,7 @@ public static class HttpClientExtensions
             var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             throw new ApplicationException($"Something went wrong calling the API: {errorContent}");
         }
+       
         
         var dataAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 

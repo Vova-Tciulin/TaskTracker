@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tasks.Cmd.Api.Models;
@@ -12,6 +13,7 @@ using Tasks.Cmd.Application.Features.Commands.UpdateTask;
 
 namespace Tasks.Cmd.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController:ControllerBase

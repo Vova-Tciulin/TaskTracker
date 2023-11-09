@@ -26,6 +26,14 @@ builder.Services.AddApplication();
 builder.Services.AddMassTransit(builder.Configuration);
 builder.Services.AddScoped<TasksEventConsumer>();
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.Authority = builder.Configuration["Services:IdentityServerUrl"];
+        opt.Audience = "taskQueryApi";
+    });
+
 //Add middleware
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
@@ -41,6 +49,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers(); 

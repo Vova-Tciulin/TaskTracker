@@ -18,6 +18,18 @@ services:
   
   rabbitmq:
     image: rabbitmq:3-management
+    
+  apigateway:
+    image: apigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateways/ApiGateway/Dockerfile
+  
+  identityserver:
+    image: identityserver
+    build:
+      context: .
+      dockerfile: src/services/IdentityService/IdentityServer/Dockerfile
   
   tasks.cmd.api:
     image: tasks.cmd.api

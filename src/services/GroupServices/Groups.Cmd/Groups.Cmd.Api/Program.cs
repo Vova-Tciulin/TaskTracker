@@ -6,6 +6,7 @@ using Groups.Cmd.Api.Extensions;
 using Groups.Cmd.Application;
 using Groups.Cmd.Infrastructure;
 using MassTransit;
+using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +31,14 @@ builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddMassTransit(builder.Configuration);
 
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.Authority = builder.Configuration["Services:IdentityServerUrl"];
+        opt.Audience = "groupCmdApi";
+    });
+
 var app = builder.Build();
 
 
@@ -42,6 +51,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

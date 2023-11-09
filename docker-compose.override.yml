@@ -56,7 +56,27 @@ services:
       - "5672:5672"
       - "15672:15672"
   
+  apigateway:
+    container_name: apigateway
+    ports:
+      - "8005:80"
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "Services:IdentityServerUrl=http://identityserver:80"
+    depends_on: 
+      - identityserver
+      - tasks.cmd.api
+      - tasks.query.api
+      - groups.query.api
+      - groups.cmd.api
   
+  identityserver:
+    container_name: identityserver
+    ports:
+      - "8080:80"
+    environment:
+      - "IdentityServer=http://identityserver:80"
+        
   tasks.cmd.api:
     container_name: tasks.cmd.api
     ports:
@@ -64,12 +84,14 @@ services:
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
       - "Services:GroupQueryUrl=http://groups.query.api:80"
+      - "Services:IdentityServerUrl=http://identityserver:80"
       - "DatabaseSettings:ConnectionString=mongodb://tasksEventDb:27017"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
       - tasksEventDb
       - rabbitmq
       - groups.query.api
+      - identityserver
     
   tasks.query.api:
     container_name: tasks.query.api
@@ -77,11 +99,13 @@ services:
       - "8002:80"
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
+      - "Services:IdentityServerUrl=http://identityserver:80"
       - ConnectionStrings__DefaultConnection=Server=tasksDb;Database=TaskDb;User=sa;Password=yourStrongPassword123;Encrypt=False;
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
       - tasksDb
       - rabbitmq
+      - identityserver
        
   groups.cmd.api:
     container_name: groups.cmd.api
@@ -89,11 +113,13 @@ services:
       - "8003:80"
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
+      - "Services:IdentityServerUrl=http://identityserver:80"
       - "DatabaseSettings:ConnectionString=mongodb://groupsEventDb"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - groupsEventDb
-      - rabbitmq  
+      - rabbitmq
+      - identityserver
         
   groups.query.api:
     container_name: groups.query.api
@@ -101,9 +127,11 @@ services:
       - "8004:80"
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
+      - "Services:IdentityServerUrl=http://identityserver:80"
       - ConnectionStrings__DefaultConnection=Server=groupsDb;Database=GroupDb;User=sa;Password=yourStrongPassword123;Encrypt=False;
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - groupsDb
       - rabbitmq
+      - identityserver
     

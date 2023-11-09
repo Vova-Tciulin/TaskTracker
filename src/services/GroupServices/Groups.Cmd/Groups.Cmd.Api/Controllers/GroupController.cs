@@ -5,10 +5,12 @@ using Groups.Cmd.Application.Features.Commands.CreateGroup;
 using Groups.Cmd.Application.Features.Commands.RemoveGroup;
 using Groups.Cmd.Application.Features.Commands.RemoveUser;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Groups.Cmd.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class GroupController: ControllerBase

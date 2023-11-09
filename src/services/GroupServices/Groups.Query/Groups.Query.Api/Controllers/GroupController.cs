@@ -1,10 +1,12 @@
 ﻿using Groups.Query.Application.Queries.GetGroup;
 using Groups.Query.Application.Queries.GetGroupsCollection;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Groups.Query.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class GroupController:ControllerBase

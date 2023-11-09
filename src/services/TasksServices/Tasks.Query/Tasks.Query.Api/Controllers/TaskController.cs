@@ -1,11 +1,13 @@
 ﻿using System.Text.Json;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tasks.Query.Application.Queries.GetTask;
 using Tasks.Query.Application.Queries.GetTasksCollection;
 
 namespace Task.Query.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController:ControllerBase

@@ -24,6 +24,14 @@ builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 builder.Services.AddMassTransit(builder.Configuration);
 builder.Services.AddScoped<GroupsEventConsumer>();
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.Authority = builder.Configuration["Services:IdentityServerUrl"];
+        opt.Audience = "groupQueryApi";
+    });
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -35,6 +43,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
