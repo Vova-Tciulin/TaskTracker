@@ -32,7 +32,11 @@ public class GroupController: ControllerBase
     {
         _logger.LogInformation($"Create new Group with userId: {model.UserId}");
 
-        var groupId = await _mediator.Send(new CreateGroupCommand() { UserId = model.UserId });
+        var groupId = await _mediator.Send(new CreateGroupCommand()
+        {
+            UserId = model.UserId,
+            Description = model.Description
+        });
         
         _logger.LogInformation($"Group created with Id: {groupId}");
         return Ok(groupId);

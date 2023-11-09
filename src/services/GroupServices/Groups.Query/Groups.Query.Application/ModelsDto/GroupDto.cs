@@ -4,6 +4,7 @@ public class GroupDto
 {
     public Guid Id { get; set; }
     public Guid AuthorId { get; set; }
+    public string Description { get; set; }
     public List<UserDto> Users { get; set; }
     public List<TaskDto> Tasks { get; set; }
 }

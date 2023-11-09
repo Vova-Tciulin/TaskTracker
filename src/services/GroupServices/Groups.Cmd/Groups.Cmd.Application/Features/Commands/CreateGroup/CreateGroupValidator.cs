@@ -9,6 +9,9 @@ public class CreateGroupValidator:AbstractValidator<CreateGroupCommand>
         RuleFor(u=>u.UserId)
             .NotEmpty().WithMessage("Guid не может быть пустым")
             .Must(BeAValidGuid).WithMessage("Недопустимый формат Guid");
+        RuleFor(u => u.Description)
+            .NotEmpty()
+            .NotNull();
     }
     private bool BeAValidGuid(Guid guid)
     {

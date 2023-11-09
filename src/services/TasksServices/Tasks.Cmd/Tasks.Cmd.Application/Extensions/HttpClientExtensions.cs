@@ -11,9 +11,8 @@ public static class HttpClientExtensions
         if (!response.IsSuccessStatusCode)
         {
             var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            throw new ApplicationException($"Something went wrong calling the API: {errorContent}");
+            throw new ApplicationException($"{errorContent}");
         }
-       
         
         var dataAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 

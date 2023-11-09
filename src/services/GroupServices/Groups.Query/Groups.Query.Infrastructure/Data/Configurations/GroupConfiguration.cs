@@ -16,5 +16,6 @@ public class GroupConfiguration:IEntityTypeConfiguration<GroupEntity>
         builder.HasMany(u => u.Users)
             .WithOne()
             .HasForeignKey(u => u.GroupId);
+        builder.Property(u => u.Description).IsRequired();
     }
 }

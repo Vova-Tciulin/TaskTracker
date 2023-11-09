@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tasks.Cmd.Application.Behaviours;
 using Tasks.Cmd.Application.EventSourcingHandlers;
+using Tasks.Cmd.Application.HttpHandlers;
 using Tasks.Cmd.Application.Services;
 using Tasks.Cmd.Domain.Aggregates;
 
@@ -19,10 +20,12 @@ public static class DependencyInjection
         services.AddSingleton(configuration);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddScoped<IEventSourcingHandler<TaskAggregate>, EventSourcingHandler>();
-        //services.AddScoped<IGroupService, GroupService>();
-        
+        services.AddScoped<AuthenticationDelegatingHandler>();
         services.AddHttpClient<IGroupService, GroupService>(o =>
-            o.BaseAddress = new Uri(configuration["Services:GroupQueryUrl"]));
+            {
+                o.BaseAddress = new Uri(configuration["Services:GroupQueryUrl"]);
+            })
+            .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
         
         return services;
     }

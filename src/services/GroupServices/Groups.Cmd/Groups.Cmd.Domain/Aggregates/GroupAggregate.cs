@@ -13,9 +13,9 @@ public class GroupAggregate:AggregateRoot
     {
         
     }
-    public GroupAggregate(Guid groupId, Guid userId)
+    public GroupAggregate(Guid groupId, Guid userId, string description)
     {
-        RaiseEvent(new GroupCreatedEvent(){AuthorId = userId, Id = groupId});
+        RaiseEvent(new GroupCreatedEvent(){AuthorId = userId, Id = groupId, Description = description});
     }
 
     private void Apply(@GroupCreatedEvent @event)
