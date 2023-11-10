@@ -20,7 +20,8 @@ public static class IdentityConfig
             new ApiScope("taskQueryApi", "Task query service api"),
             new ApiScope("taskCmdApi","Task command api"),
             new ApiScope("groupQueryApi","Group query api"),
-            new ApiScope("groupCmdApi","Group command api")
+            new ApiScope("groupCmdApi","Group command api"),
+            new ApiScope("aggregatorsApi", "TaskTracker aggregators Api")
         };
 
     //Содержит созданные ранее области для сервисов.
@@ -42,6 +43,10 @@ public static class IdentityConfig
             new ApiResource("groupCmdApi", "Group command api")
             {
                 Scopes = { "groupCmdApi" }
+            },
+            new ApiResource("aggregatorsApi", "TaskTracker aggregators Api")
+            {
+                Scopes = {"aggregatorsApi"}
             }
         };
     
@@ -106,9 +111,25 @@ public static class IdentityConfig
                     "taskQueryApi",
                     "taskCmdApi",
                     "groupQueryApi",
-                    "groupCmdApi"
+                    "groupCmdApi",
+                    "aggregatorsApi"
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha256()) },
+            },
+            new Client()
+            {
+                ClientName = "TaskTracker Aggregators",
+                ClientId = "taskTracker.aggregators",
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "taskQueryApi",
+                    "groupQueryApi",
+                    "aggregatorsApi"
+                },
+                ClientSecrets = { new Secret("aggregatorsSecret".Sha256()) },
             }
         };
 }

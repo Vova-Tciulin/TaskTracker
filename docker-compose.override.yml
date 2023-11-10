@@ -69,6 +69,7 @@ services:
       - tasks.query.api
       - groups.query.api
       - groups.cmd.api
+      - tasktracker.aggregators
   
   identityserver:
     container_name: identityserver
@@ -134,4 +135,18 @@ services:
       - groupsDb
       - rabbitmq
       - identityserver
+        
+  tasktracker.aggregators:
+    container_name: tasktracker.aggregators
+    ports:
+      - "8006:80"
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "Services:IdentityServerUrl=http://identityserver:80"
+      - "Services:GroupQueryUrl=http://groups.query.api:80"
+      - "Services:TaskQueryUrl=http://tasks.query.api:80"
+    depends_on: 
+      - identityserver
+      - groups.query.api
+      - tasks.query.api
     

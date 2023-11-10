@@ -24,11 +24,7 @@ public class GroupService:IGroupService
         
         var response = await _httpClient.GetAsync($"/api/Group/GetGroupById?id={groupId}");
         
-        if(response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
-        {
-            _logger.LogCritical("ошибка авторизации при попытки обратиться к сервису");
-            throw new Exception();
-        }
+        
         
         return await response.ReadContentAs<GroupModel>();
     }

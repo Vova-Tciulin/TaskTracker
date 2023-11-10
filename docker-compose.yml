@@ -55,6 +55,12 @@ services:
       context: .
       dockerfile: src/services/GroupServices/Groups.Query/Groups.Query.Api/Dockerfile
   
+  tasktracker.aggregators:
+    image: tasktracker.aggregators
+    build:
+      context: .
+      dockerfile: src/ApiGateways/TaskTracker.Aggregators/Dockerfile
+  
 volumes:
   tasksEventDb_data:
   portainer_data:

@@ -64,7 +64,24 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": ["groupQueryApi"]
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/group/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "tasktracker.aggregators",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/aggregators/{everything}",
+      "UpstreamHttpMethod": [ "GET"],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": ["groupQueryApi", "taskQueryApi"]
+      }
     }
+    
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:8005"

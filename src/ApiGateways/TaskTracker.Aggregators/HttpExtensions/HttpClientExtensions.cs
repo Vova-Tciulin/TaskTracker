@@ -1,8 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 
-namespace Tasks.Cmd.Application.Extensions;
+namespace TaskTracker.Aggregators.HttpExtensions;
 
 public static class HttpClientExtensions
 {
@@ -14,11 +13,8 @@ public static class HttpClientExtensions
         }
         
         if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            throw new ApplicationException($"{errorContent}");
-        }
-        
+            throw new ApplicationException($"{response.ReasonPhrase}");
+
         var dataAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return JsonSerializer.Deserialize<T>(dataAsString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
