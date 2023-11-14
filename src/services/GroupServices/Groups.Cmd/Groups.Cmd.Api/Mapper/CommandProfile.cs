@@ -13,7 +13,6 @@ public class CommandProfile:Profile
     {
         CreateMap<AddUserToGroup, AddUserCommand>();
         CreateMap<CreateGroup, CreateGroupCommand>();
-        CreateMap<RemoveGroup, RemoveGroupCommand>();
         CreateMap<RemoveUserFromGroup, RemoveUserCommand>();
     }
 }

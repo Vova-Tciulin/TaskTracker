@@ -30,11 +30,17 @@ public class GroupController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateGroup([FromBody] CreateGroup model)
     {
-        _logger.LogInformation($"Create new Group with userId: {model.UserId}");
+        _logger.LogInformation($"Create new Group");
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+        if (userId==null)
+        {
+            _logger.LogInformation($"UserId in Claims not exist!");
+            throw new Exception("userId not exist!");
+        }
 
         var groupId = await _mediator.Send(new CreateGroupCommand()
         {
-            UserId = model.UserId,
+            UserId = Guid.Parse(userId.Value),
             Description = model.Description
         });
         
@@ -44,11 +50,22 @@ public class GroupController: ControllerBase
     
     [Route("[action]")]
     [HttpDelete]
-    public async Task<IActionResult> RemoveGroup([FromBody] RemoveGroup model)
+    public async Task<IActionResult> RemoveGroup(Guid groupId)
     {
-        _logger.LogInformation($"Remove group: {model.GroupId}");
+        _logger.LogInformation($"Remove group: {groupId}");
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+        if (userId==null)
+        {
+            _logger.LogInformation($"UserId in Claims not exist!");
+            throw new Exception("userId not exist!");
+        }
 
-        var command = _map.Map<RemoveGroupCommand>(model);
+        var command = new RemoveGroupCommand()
+        {
+            UserId = Guid.Parse(userId.Value),
+            GroupId = groupId
+        };
+        
         var res = await _mediator.Send(command);
         
         _logger.LogInformation($"result of removing a group: {res}");
@@ -57,7 +74,7 @@ public class GroupController: ControllerBase
 
     
     [Route("[action]")]
-    [HttpPost]
+    [HttpPut]
     public async Task<IActionResult> AddUserToGroup([FromBody] AddUserToGroup model)
     {
         _logger.LogInformation($"Add user: {model.UserId} to group: {model.GroupId}");
@@ -70,7 +87,7 @@ public class GroupController: ControllerBase
     }
     
     [Route("[action]")]
-    [HttpDelete]
+    [HttpPut]
     public async Task<IActionResult> RemoveUserFromGroup([FromBody] RemoveUserFromGroup model)
     {
         _logger.LogInformation($"Remove user: {model.UserId} from group: {model.GroupId}");

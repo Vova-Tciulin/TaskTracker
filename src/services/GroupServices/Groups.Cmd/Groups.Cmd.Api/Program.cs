@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using EventBus.Messages;
 using EventBus.Messages.Messages;
 using Groups.Cmd.Api.Configuration;
@@ -38,9 +39,9 @@ builder.Services.AddAuthentication("Bearer")
         opt.Authority = builder.Configuration["Services:IdentityServerUrl"];
         opt.Audience = "groupCmdApi";
     });
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var app = builder.Build();
-
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (app.Environment.IsDevelopment())

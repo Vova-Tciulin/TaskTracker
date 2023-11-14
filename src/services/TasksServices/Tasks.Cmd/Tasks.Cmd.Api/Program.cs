@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using EventBus.Messages;
 using EventBus.Messages.Messages;
 using MassTransit;
@@ -41,6 +42,7 @@ builder.Services.AddAuthentication("Bearer")
         opt.Audience = "taskCmdApi";
     });
 
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var app = builder.Build();
 

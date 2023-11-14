@@ -76,7 +76,9 @@ services:
     ports:
       - "8080:80"
     environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
       - "IdentityServer=http://identityserver:80"
+      - "WebClientUrl=http://localhost:8010"
         
   tasks.cmd.api:
     container_name: tasks.cmd.api
@@ -150,3 +152,14 @@ services:
       - groups.query.api
       - tasks.query.api
     
+  webapp:
+    container_name: webapp
+    ports:
+      - "8010:80"
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - "IdentityServerUrl=http://identityserver:80"
+      - "ApiGatewayUrl=http://apigateway:80"
+    depends_on:
+      - identityserver
+      - apigateway

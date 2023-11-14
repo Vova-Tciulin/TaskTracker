@@ -1,5 +1,7 @@
-﻿using IdentityServer4;
+﻿using System.Security.Claims;
+using IdentityServer4;
 using IdentityServer4.Models;
+using IdentityServer4.Test;
 
 namespace IdentityServer.Config;
 
@@ -51,7 +53,7 @@ public static class IdentityConfig
         };
     
     //микросервисы
-    public static IEnumerable<Client> GetClients() =>
+    public static IEnumerable<Client> GetClients(IConfiguration configuration) =>
         new List<Client>()
         {
             new Client
@@ -103,7 +105,9 @@ public static class IdentityConfig
             {
                 ClientName = "MVC Client",
                 ClientId = "mvc-client",
-                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                AllowedGrantTypes = GrantTypes.Hybrid,
+                RedirectUris = new List<string>{ $"{configuration["WebClientUrl"]}/signin-oidc" },
+                RequirePkce = false,
                 AllowedScopes =
                 {
                     IdentityServerConstants.StandardScopes.OpenId,
@@ -132,4 +136,23 @@ public static class IdentityConfig
                 ClientSecrets = { new Secret("aggregatorsSecret".Sha256()) },
             }
         };
+
+    public static List<TestUser> GetUsers() =>
+        new List<TestUser>()
+        {
+            new TestUser
+            {
+                SubjectId = "a9ea0f25-b964-409f-bcce-c923266249b4",
+                Username = "Mick",
+                Password = "MickPassword",
+                Claims = new List<Claim>
+                {
+                    new Claim("given_name", "Mick"),
+                    new Claim("family_name", "Mining")
+                }
+            }
+        };
+
+
+
 }

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.Linq;
 using Tasks.Cmd.Api.Models;
 using Tasks.Cmd.Application.Features.Commands.CompleteTask;
 using Tasks.Cmd.Application.Features.Commands.CreateTask;
@@ -34,8 +35,16 @@ public class TaskController:ControllerBase
     public async Task<IActionResult> CreateTask([FromBody]CreateTaskDto model)
     {
         _logger.LogInformation($"Create new Task with model: {JsonSerializer.Serialize(model)}");
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+
+        if (userId==null)
+        {
+            throw new Exception("userId not exist!");
+        }
         
         var command = _map.Map<CreateTaskCommand>(model);
+        command.AuthorId=Guid.Parse(userId.Value);
+        
         var task=await _mediator.Send(command);
         
         _logger.LogInformation($"Task created with Id: {task.Id}");
@@ -47,8 +56,17 @@ public class TaskController:ControllerBase
     public async Task<IActionResult> UpdateTask([FromBody]UpdateTaskDto model)
     {
         _logger.LogInformation($"Update Task with model: {JsonSerializer.Serialize(model)}");
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+
+        if (userId==null)
+        {
+            _logger.LogInformation($"UserId in Claims not exist!");
+            throw new Exception("userId not exist!");
+        }
         
         var command = _map.Map<UpdateTaskCommand>(model);
+        command.AuthorId=Guid.Parse(userId.Value);
+        
         await _mediator.Send(command);
 
         return Ok();
@@ -56,11 +74,22 @@ public class TaskController:ControllerBase
 
     [HttpDelete]
     [Route("[action]")]
-    public async Task<IActionResult> RemoveTask([FromBody]RemoveTaskDto model)
+    public async Task<IActionResult> RemoveTask(Guid taskId)
     {
-        _logger.LogInformation($"Update Task with model: {JsonSerializer.Serialize(model)}");
+        _logger.LogInformation($"Remove Task with id: {taskId}");
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+        if (userId==null)
+        {
+            _logger.LogInformation($"UserId in Claims not exist!");
+            throw new Exception("userId not exist!");
+        }
+
+        var command = new RemoveTaskCommand()
+        {
+            AuthorId = Guid.Parse(userId.Value),
+            TaskId = taskId
+        };
         
-        var command = _map.Map<RemoveTaskCommand>(model);
         var res = await _mediator.Send(command);
 
         _logger.LogInformation($"Execution result: {res}");
@@ -73,7 +102,7 @@ public class TaskController:ControllerBase
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPut]
     [Route("[action]")]
     public async Task<IActionResult> ExecuteTask([FromBody] ExecuteTaskDto model)
     {
@@ -85,7 +114,7 @@ public class TaskController:ControllerBase
         return Ok();
     }
 
-    [HttpPost]
+    [HttpPut]
     [Route("[action]")]
     public async Task<IActionResult> CompleteTask([FromBody] CompleteTaskDto model)
     {

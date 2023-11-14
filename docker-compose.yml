@@ -61,6 +61,12 @@ services:
       context: .
       dockerfile: src/ApiGateways/TaskTracker.Aggregators/Dockerfile
   
+  webapp:
+    image: webapp
+    build: 
+      context: .
+      dockerfile: src/Web/WebApp/Dockerfile
+
 volumes:
   tasksEventDb_data:
   portainer_data:

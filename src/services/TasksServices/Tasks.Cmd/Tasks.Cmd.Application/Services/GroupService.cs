@@ -24,8 +24,6 @@ public class GroupService:IGroupService
         
         var response = await _httpClient.GetAsync($"/api/Group/GetGroupById?id={groupId}");
         
-        
-        
         return await response.ReadContentAs<GroupModel>();
     }
 }
