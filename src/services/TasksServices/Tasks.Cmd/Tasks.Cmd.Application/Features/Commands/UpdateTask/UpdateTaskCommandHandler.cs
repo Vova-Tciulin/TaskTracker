@@ -38,6 +38,12 @@ public class UpdateTaskCommandHandler: IRequestHandler<UpdateTaskCommand>
             _logger.LogInformation($"Update Deadline: {request.NewDeadLine}");
             aggregate.UpdateDeadline(request.AuthorId, request.NewDeadLine.Value);
         }
+
+        if (!string.IsNullOrWhiteSpace(request.NewTitle))
+        {
+            _logger.LogInformation($"Update Task with message: {request.NewTask}");
+            aggregate.UpdateTitle(request.AuthorId, request.NewTitle);
+        }
         
         await _eventSourcingHandler.SaveAsync(aggregate);
         

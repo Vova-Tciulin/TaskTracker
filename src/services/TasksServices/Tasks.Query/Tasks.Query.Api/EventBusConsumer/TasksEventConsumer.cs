@@ -75,6 +75,14 @@ public class TasksEventConsumer:IConsumer<EventMessage>
                 break;
             }
 
+            case "TaskUpdatedTitleEvent":
+            {
+                var @event = JsonSerializer.Deserialize<TaskUpdatedTitleEvent>(context.Message.Message);
+                
+                await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
+                break;
+            }
             default:
             {
                 _logger.LogWarning($"{@context.Message.EventType} doesn't supported");

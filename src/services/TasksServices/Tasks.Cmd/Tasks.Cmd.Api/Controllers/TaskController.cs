@@ -47,8 +47,14 @@ public class TaskController:ControllerBase
         
         var task=await _mediator.Send(command);
         
+        var taskDto = _map.Map<TaskDto>(model);
+        taskDto.TaskId = task.Id;
+        taskDto.State = 0;
+        taskDto.AuthorId= Guid.Parse(userId.Value);
+        taskDto.TaskCreated = task.TaskCreated;
+        
         _logger.LogInformation($"Task created with Id: {task.Id}");
-        return Ok(task.Id);
+        return Ok(taskDto);
     }
 
     [HttpPut]

@@ -35,7 +35,7 @@ public class CreateTaskCommandHandler:IRequestHandler<CreateTaskCommand, TaskAgg
                 $"user with id: {request.AuthorId} isn't a member of the group with id: {request.GroupId}");
         }
         
-        var aggregate = new TaskAggregate(Guid.NewGuid(),request.GroupId, request.AuthorId, request.Task,
+        var aggregate = new TaskAggregate(Guid.NewGuid(),request.GroupId, request.AuthorId,request.Title, request.Task,
             request.DeadLine);
         
         await _eventSourcingHandler.SaveAsync(aggregate);

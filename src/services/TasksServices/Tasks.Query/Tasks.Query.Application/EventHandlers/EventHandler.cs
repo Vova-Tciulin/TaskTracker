@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MassTransit;
 using Microsoft.Extensions.Logging;
 using Tasks.Common.enums;
 using Tasks.Common.Events;
@@ -97,6 +98,22 @@ public class EventHandler:IEventHandlers
         }
 
         task.Task = @event.Task;
+        
+        _taskRepository.UpdateTask(task);
+        await _taskRepository.SaveChangesAsync();
+    }
+
+    public async Task On(TaskUpdatedTitleEvent @event)
+    {
+        var task = await _taskRepository.GetByIdAsync(@event.Id);
+        
+        if (task==null)
+        {
+            _logger.LogError($"Task with id: {@event.Id} was not found");
+            throw new NotFoundException($"Task with id: {@event.Id} was not found");
+        }
+
+        task.Title = @event.Title;
         
         _taskRepository.UpdateTask(task);
         await _taskRepository.SaveChangesAsync();

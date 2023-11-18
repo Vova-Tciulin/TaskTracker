@@ -6,7 +6,7 @@ public class TaskCreatedEvent:BaseEvent
 {
     public Guid AuthorId { get; set; }
     public Guid GroupId { get; set; }
-    
+    public string Title { get; set; }
     public string Task { get; set; }
     public DateTime DeadLine { get; set; }
     public TaskState State { get; set; }

@@ -13,18 +13,11 @@ public class UpdateTaskValidator:AbstractValidator<UpdateTaskCommand>
         RuleFor(u=>u.AuthorId)
             .NotEmpty().WithMessage("Guid не может быть пустым")
             .Must(BeAValidGuid).WithMessage("Недопустимый формат Guid");
-
-        RuleFor(model => model.NewTask)
-            .NotNull().When(model => model.NewDeadLine == null)
-            .NotEmpty().When(model => model.NewDeadLine == null);
-
-        RuleFor(model => model.NewDeadLine)
-            .NotNull().When(model => model.NewTask == null)
-            .Must(BeAValidDateTime).When(model => model.NewTask == null);
-
+        
+        
         RuleFor(model => model)
             .Must(HaveAtLeastOnePropertyNotNull)
-            .WithMessage("Хотя бы одно из свойств должно быть заполнено.");
+            .WithMessage("Хотя бы одно из полей не должно быть пустым.");
     }
     
     private bool BeAValidGuid(Guid guid)
@@ -44,6 +37,6 @@ public class UpdateTaskValidator:AbstractValidator<UpdateTaskCommand>
 
     private bool HaveAtLeastOnePropertyNotNull(UpdateTaskCommand model)
     {
-        return model.NewTask != null || model.NewDeadLine != null;
+        return model.NewTask != null || model.NewDeadLine != null|| model.NewTitle !=null;
     }
 }

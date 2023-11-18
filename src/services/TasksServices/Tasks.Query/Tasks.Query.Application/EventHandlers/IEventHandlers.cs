@@ -10,4 +10,5 @@ public interface IEventHandlers
     Task On(TaskTakenOnWorkEvent @event);
     Task On(TaskUpdatedDeadlineEvent @event);
     Task On(TaskUpdatedTaskEvent @event);
+    Task On(TaskUpdatedTitleEvent @event);
 }

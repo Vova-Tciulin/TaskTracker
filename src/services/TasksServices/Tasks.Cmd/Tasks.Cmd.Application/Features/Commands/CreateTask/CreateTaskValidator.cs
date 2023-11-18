@@ -9,6 +9,9 @@ public class CreateTaskValidator:AbstractValidator<CreateTaskCommand>
         RuleFor(u => u.Task)
             .NotEmpty().WithMessage("Описание задачи не может быть пустым!");
         
+        RuleFor(u => u.Title)
+            .NotEmpty().WithMessage("Название задачи не может быть пустым!");
+        
         RuleFor(u=>u.AuthorId)
             .NotEmpty().WithMessage("Guid не может быть пустым")
             .Must(BeAValidGuid).WithMessage("Недопустимый формат Guid");

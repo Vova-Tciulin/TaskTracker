@@ -16,5 +16,6 @@ public class CommandProfile:Profile
         CreateMap<CreateTaskDto, CreateTaskCommand>();
         CreateMap<ExecuteTaskDto, ExecuteTaskCommand>();
         CreateMap<UpdateTaskDto, UpdateTaskCommand>();
+        CreateMap<CreateTaskDto, TaskDto>();
     }
 }

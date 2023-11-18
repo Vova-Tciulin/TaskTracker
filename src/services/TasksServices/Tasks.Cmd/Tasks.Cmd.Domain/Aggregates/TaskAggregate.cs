@@ -12,16 +12,28 @@ public class TaskAggregate:AggregateRoot
     private TaskState _state;
     private bool _isActive;
     private Guid? _workerId;
+    private DateTime _taskCreated;
+    
     public Guid GroupId => _groupId;
+    public DateTime TaskCreated => _taskCreated;
 
     public TaskAggregate()
     {
         
     }
-    public TaskAggregate(Guid id,Guid groupId, Guid authorId, string task,DateTime deadline)
+    public TaskAggregate(Guid id,Guid groupId, Guid authorId,string title, string task,DateTime deadline)
     {
         RaiseEvent(new TaskCreatedEvent()
-            {Id=id,GroupId=groupId, AuthorId = authorId, Task = task, State = TaskState.New,TaskCreated = DateTime.Now,DeadLine = deadline});
+        {
+            Id=id,
+            GroupId=groupId,
+            AuthorId = authorId,
+            Title = title,
+            Task = task,
+            State = TaskState.New,
+            TaskCreated = DateTime.Now,
+            DeadLine = deadline
+        });
     }
 
     private void Apply(TaskCreatedEvent @event)
@@ -31,6 +43,7 @@ public class TaskAggregate:AggregateRoot
         _authorId = @event.AuthorId;
         _state = @event.State;
         _isActive = true;
+        _taskCreated = @event.TaskCreated;
     }
 
     public void UpdateTask(Guid authorId, string newTask)
@@ -137,6 +150,29 @@ public class TaskAggregate:AggregateRoot
     {
         _state = TaskState.Finished;
     }
-    
+
+    public void UpdateTitle(Guid authorId, string title)
+    {
+        if (_authorId!=authorId)
+        {
+            throw new InvalidOperationException("Данный пользователь не является автором этой задачи!");
+        }
+
+        if (!_isActive)
+        {
+            throw new InvalidOperationException("Данная задача удалена!");
+        }
+        
+        RaiseEvent(new TaskUpdatedTitleEvent()
+        {
+            Id = _id,
+            Title = title
+        });
+    }
+
+    private void Apply(TaskUpdatedTitleEvent @event)
+    {
+        
+    }
     
 }

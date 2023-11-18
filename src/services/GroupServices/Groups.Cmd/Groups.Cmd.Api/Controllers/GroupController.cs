@@ -38,14 +38,20 @@ public class GroupController: ControllerBase
             throw new Exception("userId not exist!");
         }
 
-        var groupId = await _mediator.Send(new CreateGroupCommand()
+        var group = await _mediator.Send(new CreateGroupCommand()
         {
             UserId = Guid.Parse(userId.Value),
             Description = model.Description
         });
         
-        _logger.LogInformation($"Group created with Id: {groupId}");
-        return Ok(groupId);
+        
+        _logger.LogInformation($"Group created with Id: {group.Id}");
+        return Ok(new GroupDto()
+        {
+            Id = group.Id,
+            AuthorId = Guid.Parse(userId.Value),
+            Description = model.Description
+        });
     }
     
     [Route("[action]")]
