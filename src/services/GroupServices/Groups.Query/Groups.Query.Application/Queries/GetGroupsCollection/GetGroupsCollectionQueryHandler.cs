@@ -28,7 +28,8 @@ public class GetGroupsCollectionQueryHandler:IRequestHandler<GetGroupsCollection
         if (groups==null|| !groups.Any())
         {
             _logger.LogWarning($"groups for user: {request.UserId} not found!");
-            throw new NotFoundException($"groups for user: {request.UserId} not found!");
+            var emptyGroup = new List<GroupDto>();
+            return emptyGroup;
         }
 
         return _map.Map<List<GroupDto>>(groups);

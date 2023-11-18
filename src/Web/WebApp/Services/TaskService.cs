@@ -38,7 +38,7 @@ public class TaskService:ITaskService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task RemoveTask(Guid taskId)
+    public async Task RemoveTask(string taskId)
     {
         var uri=ApiUrls.RemoveTaskUrl(_baseUrl,taskId);
         

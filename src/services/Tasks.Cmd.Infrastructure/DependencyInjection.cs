@@ -3,6 +3,8 @@ using EventBus.Messages.Messages;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
 using RabbitMQ.Client;
 using Tasks.Cmd.Domain.Aggregates;
 using Tasks.Cmd.Infrastructure.Data;
@@ -21,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<ITaskEventRepository, TaskEventRepository>();
         services.AddScoped<IProducer, Producer>();
         
+
         
         
         return services;

@@ -1,0 +1,23 @@
+﻿@model CreateGroupVm
+
+<div class="modal-dialog">
+    <form method="post" asp-action="CreateGroup">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Создание группы</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="form-group">
+                    <label  asp-for="Description">Название группы</label>
+                    <input required type="text" class="form-control" asp-for="Description" placeholder="Введите название">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="submit" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+    </form>
+</div>

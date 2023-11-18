@@ -14,6 +14,8 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddTransient<AuthenticationDelegatingHandler>();
 
+//builder.Services.AddScoped<IGroupService, GroupServiceMoq>();
+
 builder.Services.AddHttpClient<ITaskService, TaskService>()
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 
@@ -21,6 +23,8 @@ builder.Services.AddHttpClient<IGroupService, GroupService>()
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddAuthentication(opt =>
     {

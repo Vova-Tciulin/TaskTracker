@@ -38,8 +38,12 @@ public class GroupController:ControllerBase
             Users = groupResponse.Users
         };
         
-        var tasksResponse = await _taskService.GetTasksByGroupId(groupId);
-        groupModel.Tasks = _map.Map<List<TaskModel>>(tasksResponse);
+        if (groupResponse.Tasks.Any())
+        {
+            var tasksResponse = await _taskService.GetTasksByGroupId(groupId);
+            groupModel.Tasks = _map.Map<List<TaskModel>>(tasksResponse);
+        }
+        
         return Ok(groupModel);
     }
 }

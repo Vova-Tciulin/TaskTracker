@@ -15,7 +15,7 @@ public class TaskService:ITaskService
     
     public async Task<List<TaskResponse>> GetTasksByGroupId(Guid groupId)
     {
-        var response = await _client.GetAsync($"/api/task/GetTasksByGroupId?groupId=={groupId}");
+        var response = await _client.GetAsync($"/api/task/GetTasksByGroupId?groupId={groupId}");
         return await response.ReadContentAs<List<TaskResponse>>();
     }
 }

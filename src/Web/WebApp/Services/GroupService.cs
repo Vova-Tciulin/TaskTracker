@@ -60,7 +60,7 @@ public class GroupService: IGroupService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task<GroupAggregatorDto> GetGroupAggregatorById(Guid groupId)
+    public async Task<GroupAggregatorDto> GetGroupAggregatorById(string groupId)
     {
         var uri = ApiUrls.GetGroupAggregatorByIdUrl(_baseUrl,groupId);
         
@@ -71,7 +71,7 @@ public class GroupService: IGroupService
         return await response.ReadContentAs<GroupAggregatorDto>();
     }
 
-    public async Task<List<GroupDto>> GetGroupsByUserId(Guid userId)
+    public async Task<List<GroupDto>> GetGroupsByUserId(string userId)
     {
         var uri = ApiUrls.GetGroupsByUserIdUrl(_baseUrl,userId);
         

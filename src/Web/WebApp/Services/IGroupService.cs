@@ -10,7 +10,7 @@ public interface IGroupService
     Task RemoveGroup(Guid groupId);
     Task RemoveUserFromGroup(RemoveUserFromGroupDto model);
     
-    Task<GroupAggregatorDto> GetGroupAggregatorById(Guid groupId);
-    Task<List<GroupDto>> GetGroupsByUserId(Guid userId);
+    Task<GroupAggregatorDto> GetGroupAggregatorById(string groupId);
+    Task<List<GroupDto>> GetGroupsByUserId(string userId);
     
 }

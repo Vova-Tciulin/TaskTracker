@@ -134,6 +134,24 @@ public static class IdentityConfig
                     "aggregatorsApi"
                 },
                 ClientSecrets = { new Secret("aggregatorsSecret".Sha256()) },
+            },
+            new Client()
+            {
+                ClientName = "TestClient",
+                ClientId = "test-client",
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                RequirePkce = false,
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "taskQueryApi",
+                    "taskCmdApi",
+                    "groupQueryApi",
+                    "groupCmdApi",
+                    "aggregatorsApi"
+                },
+                ClientSecrets = { new Secret("MVCSecret".Sha256()) },
             }
         };
 

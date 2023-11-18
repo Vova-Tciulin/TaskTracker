@@ -7,7 +7,7 @@ public interface ITaskService
 {
     Task CreateTask(CreateTaskDto model);
     Task UpdateTask(UpdateTaskDto model);
-    Task RemoveTask(Guid taskId);
+    Task RemoveTask(string taskId);
     Task ChangeTaskState(ChangeTaskStateDto model,string currentTaskState);
     
     Task<TaskDto> GetTaskById(Guid taskId);

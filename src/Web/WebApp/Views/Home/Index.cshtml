@@ -1,21 +1,192 @@
-﻿@model List<System.Security.Claims.Claim>
+﻿@model List<GroupVm>
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <div>
-        @foreach (var claim in @Model)
-        {
-            <p>
-                @claim.Type
-            </p>
-            <p>
-                @claim.Value
-            </p>
-        }
+
+
+<main class="d-flex flex-nowrap ">
+  
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            <span class="fs-4">Группы</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a onclick="createGroup()" class="btn nav-link text-white text-start">
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        <span>создать группу</span>
+                        <hr>
+                    </p>
+                </a>
+            </li>
+            
+            @for (int i=0;i<Model.Count;i++)
+            {
+                <li class="nav-item" >
+                    <a onclick="getGroup('@Model[i].Id')" class="btn nav-link text-white py-2" id="@Model[i].Id"> @Model[i].Description</a>
+                </li>
+            }
+
+
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>mdo</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" href="#">New project...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Sign out</a></li>
+            </ul>
+        </div>
     </div>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    
+    <div class="b-example-divider b-example-vr" id="mainContent">
+        vfadvad
+    </div>
+</main>
+        
+        
+        
+        
+        
+        
+        @*<div class="col-md-2 border border-secondary rounded" id="groupList">
+            <h5>Group List</h5>
+            <ul class="list-group">
+                
+                <li class="list-group-item p-0">
+                    <button onclick="createGroup()" class="btn btn-block p-3">
+                        <p class="text-dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            <span>создать группу</span>
+                        </p>
+                    </button>
+                </li>
+                
+                @foreach (var group in @Model)
+                {
+                    <li class="list-group-item p-0">
+                        <button onclick="getGroup('@group.Id')" class="btn btn-block p-3"> @group.Description</button>
+                    </li>
+                }
+            </ul>
+        </div>*@
+        
+
+
+<!-- Окно создания карточки -->
+<div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
 </div>
+
+<!-- Окно информации о карточке -->
+<div class="modal fade" id="taskInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+</div>
+
+<!-- Окно создания группы -->
+<div class="modal fade" id="createGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+</div>
+
+
+
+
+<script >
+    async function getGroup(groupId){
+        const url='@Url.Action("GetGroup", "Group")'+`?groupId=${groupId}`;
+        const response=await fetch(url);
+        if (response.ok){
+            const group = await response.text();
+            var navItems = document.getElementsByClassName('active');
+            for (var i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+            }
+            var btn= document.getElementById(groupId);
+            btn.classList.add('active');
+            
+            document.getElementById('mainContent').innerHTML = group;
+        }
+    }
+ 
+    async function createTaskView(groupId){
+            const url= '@Url.Action("CreateTask", "Task")'+`?groupId=${groupId}`;
+            const response= await fetch(url, {
+                method: 'GET'
+            });
+            if (response.ok){
+                const createTaskView= await response.text();
+                document.getElementById('createTask').innerHTML = createTaskView;
+                $('#createTask').modal('show');
+            }
+        }
+    
+    async function createGroup(){
+        const url= '@Url.Action("CreateGroup", "Group")';
+        const response= await fetch(url, {
+            method: 'GET'
+        });
+        if (response.ok){
+            const createGroupView= await response.text();
+            document.getElementById('createGroup').innerHTML = createGroupView;
+            $('#createGroup').modal('show');
+        }           
+    }
+       
+    async function taskInfoView(taskId){
+                const url= '@Url.Action("TaskInfo", "Task")'+`?taskId=${taskId}`;
+                const response= await fetch(url);
+                if (response.ok){
+                    const taskInfoView= await response.text();
+                    document.getElementById('taskInfo').innerHTML = taskInfoView;
+                    $('#taskInfo').modal('show');
+                }
+            }
+            
+    async function removeTask(taskId, groupId){
+        const url= '@Url.Action("RemoveTask", "Task")'+`?taskId=${taskId}`;
+        const response= await fetch(url,{
+            method: 'DELETE'    
+        });
+        if (response.ok){
+            const url='@Url.Action("GetGroup", "Group")'+`?groupId=${groupId}`;
+            const responseGroup=await fetch(url);
+            if (responseGroup.ok){
+                const group = await responseGroup.text();
+                document.getElementById('mainContent').innerHTML = group;
+            }
+        }
+    }
+    
+    async function changeTaskState(taskId, currentState, groupId){
+        const url= '@Url.Action("ChangeTaskState", "Task")'+`?taskId=${taskId}`+`&currentState=${currentState}`;
+        const response= await fetch(url,{
+            method: 'PUT'    
+        });
+        if (response.ok){
+            const url='@Url.Action("GetGroup", "Group")'+`?groupId=${groupId}`;
+            const responseGroup=await fetch(url);
+            if (responseGroup.ok){
+                const group = await responseGroup.text();
+                document.getElementById('mainContent').innerHTML = group;
+            }
+        }  
+    }
+    
+   
+</script>

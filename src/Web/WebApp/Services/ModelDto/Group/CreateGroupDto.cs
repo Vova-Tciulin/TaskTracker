@@ -2,5 +2,5 @@
 
 public class CreateGroupDto
 {
-    
+    public string Description { get; set; }
 }
