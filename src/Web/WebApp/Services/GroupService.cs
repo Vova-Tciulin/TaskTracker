@@ -16,7 +16,7 @@ public class GroupService: IGroupService
         _baseUrl = configuration["ApiGatewayUrl"];
     }
 
-    public async Task CreateGroup(CreateGroupDto model)
+    public async Task<GroupDto> CreateGroup(CreateGroupDto model)
     {
         string uri = ApiUrls.CreateGroupUrl(_baseUrl);
         
@@ -24,7 +24,7 @@ public class GroupService: IGroupService
         var response = await _client.PostAsJsonAsync(uri, model);
         _logger.LogInformation($"[CreateGroup] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        return await response.ReadContentAs<GroupDto>();
     }
 
     public async Task AddUserToGroup(AddUserToGroupDto model)

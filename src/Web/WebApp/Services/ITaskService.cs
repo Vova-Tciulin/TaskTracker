@@ -5,7 +5,7 @@ namespace WebApp.Services;
 
 public interface ITaskService
 {
-    Task CreateTask(CreateTaskDto model);
+    Task<TaskDto> CreateTask(CreateTaskDto model);
     Task UpdateTask(UpdateTaskDto model);
     Task RemoveTask(string taskId);
     Task ChangeTaskState(ChangeTaskStateDto model,string currentTaskState);

@@ -8,7 +8,7 @@ using WebApp.Services.ModelDto.Task;
 
 namespace WebApp.Controllers;
 
-[Authorize]
+//[Authorize]
 public class TaskController:Controller
 {
     private readonly IMapper _map;
@@ -31,7 +31,6 @@ public class TaskController:Controller
         var createTaskVm = new CreateTaskVm
         {
             GroupId = groupId,
-            DeadLine = DateTime.Now
         };
 
         return PartialView("CreateTaskPartial", createTaskVm);
@@ -46,19 +45,14 @@ public class TaskController:Controller
         {
             GroupId = model.GroupId,
             Task = model.Task,
-            DeadLine = model.DeadLine
+            Title = model.Title,
+            DeadLine = DateTime.Parse(model.DeadLine)
         });
+        
         return RedirectToAction("Index","Home");
     }
 
-    [HttpGet]
-    public async Task<IActionResult> TaskInfo(Guid taskId)
-    {
-        var taskDto = await _taskService.GetTaskById(taskId);
-        var taskVm = _map.Map<TaskVm>(taskDto);
-        
-        return PartialView("TaskInfoPartial", taskVm);
-    }
+   
 
     [HttpDelete]
     public async Task<IActionResult> RemoveTask(string taskId)

@@ -3,6 +3,7 @@ using Groups.Query.Api.Consumers;
 using Groups.Query.Api.Extensions;
 using Groups.Query.Application;
 using Groups.Query.Infrastructure;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,10 @@ builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 //Add massTransit
 builder.Services.AddMassTransit(builder.Configuration);
 builder.Services.AddScoped<GroupsEventConsumer>();
+
+//Add serilog
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console());
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", opt =>
@@ -47,5 +52,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//Migrate Db
+DatabaseExtensions.MigrateDatabase(app);
 
 app.Run();

@@ -16,7 +16,7 @@ public class TaskService:ITaskService
         _baseUrl = configuration["ApiGatewayUrl"];
     }
 
-    public async Task CreateTask(CreateTaskDto model)
+    public async Task<TaskDto> CreateTask(CreateTaskDto model)
     {
         var uri = ApiUrls.CreateTaskUrl(_baseUrl);
         
@@ -24,7 +24,7 @@ public class TaskService:ITaskService
         var response = await _client.PostAsJsonAsync(uri, model);
         _logger.LogInformation($"[CreateTask] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        return await response.ReadContentAs<TaskDto>();
     }
 
     public async Task UpdateTask(UpdateTaskDto model)

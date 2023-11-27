@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using WebApp.Models.Groups;
 using WebApp.Models.Task;
+using WebApp.Models.User;
 using WebApp.Services.ModelDto.Group;
 using WebApp.Services.ModelDto.Task;
 
@@ -16,5 +17,6 @@ public class MapProfile:Profile
                 src.State==0?"New":src.State==1?"InWork":"Finished"));;
         CreateMap<GroupAggregatorDto, GroupAggregatorVm>();
 
+        CreateMap<UserDto, UserVm>();
     }
 }

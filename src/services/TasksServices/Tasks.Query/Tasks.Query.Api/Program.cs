@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using Serilog;
 using Task.Query.Api.Configuration;
 using Task.Query.Api.EventBusConsumer;
 using Task.Query.Api.Extensions;
@@ -26,6 +27,11 @@ builder.Services.AddApplication();
 builder.Services.AddMassTransit(builder.Configuration);
 builder.Services.AddScoped<TasksEventConsumer>();
 
+//Add serilog
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console());
+
+//Add JWT Authentication
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", opt =>
     {
@@ -52,6 +58,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers(); 
+app.MapControllers();
+
+//Migrate Db
+DatabaseExtensions.MigrateDatabase(app);
 
 app.Run();

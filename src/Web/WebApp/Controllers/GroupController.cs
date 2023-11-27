@@ -8,7 +8,7 @@ using WebApp.Services.ModelDto.Group;
 
 namespace WebApp.Controllers;
 
-[Authorize]
+//[Authorize]
 public class GroupController:Controller
 {
     private readonly IMapper _map;
@@ -45,11 +45,12 @@ public class GroupController:Controller
     {
         _logger.LogInformation($"model: {JsonSerializer.Serialize(model)}");
         
-        await _groupService.CreateGroup(new CreateGroupDto()
+        var newGroup= await _groupService.CreateGroup(new CreateGroupDto()
         {
             Description = model.Description
         });
 
+        
         return RedirectToAction("Index","Home");
     }
     

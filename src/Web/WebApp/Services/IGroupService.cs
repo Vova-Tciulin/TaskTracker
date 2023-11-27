@@ -5,7 +5,7 @@ namespace WebApp.Services;
 
 public interface IGroupService
 {
-    Task CreateGroup(CreateGroupDto model);
+    Task<GroupDto> CreateGroup(CreateGroupDto model);
     Task AddUserToGroup(AddUserToGroupDto model);
     Task RemoveGroup(Guid groupId);
     Task RemoveUserFromGroup(RemoveUserFromGroupDto model);
