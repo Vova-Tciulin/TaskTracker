@@ -8,7 +8,7 @@ using WebApp.Services;
 
 namespace WebApp.Controllers;
 
-//[Authorize]
+[Authorize]
 public class HomeController : Controller
 {
     private readonly IMapper _map;
@@ -25,9 +25,9 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         
-        //var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+       var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
 
-        var groupsDto = await _groupService.GetGroupsByUserId(Guid.NewGuid().ToString());
+        var groupsDto = await _groupService.GetGroupsByUserId(userId.Value);
         var groupsVm = _map.Map<List<GroupVm>>(groupsDto);
         
         

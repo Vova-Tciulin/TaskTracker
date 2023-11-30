@@ -13,23 +13,29 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-//builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+builder.Services.AddTransient<AuthenticationDelegatingHandler>();
 
+
+/*
 builder.Services.AddScoped<Db>();
 builder.Services.AddScoped<IGroupService, GroupServiceMoq>();
 builder.Services.AddScoped<ITaskService, TaskServiceMoq>();
+*/
+
 
 builder.Services.AddAutoMapper(typeof(Program));
-/*
+
+
 builder.Services.AddHttpClient<ITaskService, TaskService>()
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 
 builder.Services.AddHttpClient<IGroupService, GroupService>()
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+    
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-
+IdentityModelEventSource.ShowPII = true;
 
 builder.Services.AddAuthentication(opt =>
     {
@@ -66,7 +72,8 @@ builder.Services.AddAuthentication(opt =>
         opt.Scope.Add("groupCmdApi");
         opt.Scope.Add("aggregatorsApi");
     });
-    */
+    
+    
 
 
 var app = builder.Build();

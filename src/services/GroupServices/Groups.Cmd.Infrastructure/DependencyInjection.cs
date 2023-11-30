@@ -19,7 +19,8 @@ public static class DependencyInjection
         services.AddScoped<IGroupEventRepository, GroupEventRepository>();
         services.AddScoped<IProducer, Producer>();
         
-        
+        //Add MongoMap
+        services.AddMongoMap();
         
         return services;
     }

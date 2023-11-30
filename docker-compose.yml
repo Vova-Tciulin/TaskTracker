@@ -16,6 +16,9 @@ services:
   groupsDb:
     image: mcr.microsoft.com/mssql/server:2022-latest
   
+  identityDb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    
   rabbitmq:
     image: rabbitmq:3-management
     
@@ -73,3 +76,4 @@ volumes:
   task-data:
   groupsEventDb_data:
   group-data:
+  identity-data:

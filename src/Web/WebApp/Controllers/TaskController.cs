@@ -8,7 +8,7 @@ using WebApp.Services.ModelDto.Task;
 
 namespace WebApp.Controllers;
 
-//[Authorize]
+[Authorize]
 public class TaskController:Controller
 {
     private readonly IMapper _map;

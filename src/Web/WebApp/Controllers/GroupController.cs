@@ -8,7 +8,7 @@ using WebApp.Services.ModelDto.Group;
 
 namespace WebApp.Controllers;
 
-//[Authorize]
+[Authorize]
 public class GroupController:Controller
 {
     private readonly IMapper _map;
@@ -60,5 +60,19 @@ public class GroupController:Controller
         await _groupService.RemoveGroup(groupId);
 
         return RedirectToAction("Index", "Home");
+    }
+
+    public async Task<IActionResult> LeaveTheGroup(Guid groupId)
+    {
+        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+
+        await _groupService.RemoveUserFromGroup(new RemoveUserFromGroupDto()
+        {
+            UserId = userId.Value,
+            GroupId = groupId.ToString()
+        });
+
+        return RedirectToAction("Index", "Home");
+        
     }
 }

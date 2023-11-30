@@ -14,6 +14,7 @@ public class DatabaseExtensions
 
             int maxAttempts = 3;
             int attemptCount = 0;
+            var delay = 5;
 
             while (attemptCount < maxAttempts)
             {
@@ -28,7 +29,8 @@ public class DatabaseExtensions
                     Log.Error("A database migration error occurred");
 
                     attemptCount++;
-                    Task.Delay(TimeSpan.FromSeconds(5)).Wait();
+                    Task.Delay(TimeSpan.FromSeconds(delay)).Wait();
+                    delay += 5;
                 }
             }
         }

@@ -1,7 +1,33 @@
+using IdentityServer;
 using IdentityServer.Config;
+using IdentityServer.Data;
+using IdentityServer.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddRazorPages();
+
+//Add serilog
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console());
+
+//Add IdentityDb
+builder.Services.AddDbContext<IdentityDb>(opts =>
+    opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
+    {
+        opt.Password.RequiredLength = 7;
+        opt.Password.RequireUppercase = false;
+        opt.Password.RequireNonAlphanumeric = false;
+    })
+    .AddEntityFrameworkStores<IdentityDb>();
+
+//Add IdentityServer
 builder.Services.AddIdentityServer(opt =>
     {
         opt.IssuerUri = "http://localhost:8080";
@@ -10,7 +36,7 @@ builder.Services.AddIdentityServer(opt =>
     .AddInMemoryApiScopes(IdentityConfig.GetApiScope())
     .AddInMemoryApiResources(IdentityConfig.GetApiResources())
     .AddInMemoryIdentityResources(IdentityConfig.GetIdentityResources())
-    .AddTestUsers(IdentityConfig.GetUsers())
+    .AddAspNetIdentity<User>()
     .AddInMemoryClients(IdentityConfig.GetClients(builder.Configuration))
     .AddDeveloperSigningCredential();
 
@@ -25,8 +51,8 @@ app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-});
+app.MapRazorPages();
+
+SeedData.EnsureSeedData(app);
+
 app.Run();

@@ -23,8 +23,8 @@ public static class DependencyInjection
         services.AddScoped<ITaskEventRepository, TaskEventRepository>();
         services.AddScoped<IProducer, Producer>();
         
-
-        
+        //Add mongo map
+        services.AddMongoMap();
         
         return services;
     }

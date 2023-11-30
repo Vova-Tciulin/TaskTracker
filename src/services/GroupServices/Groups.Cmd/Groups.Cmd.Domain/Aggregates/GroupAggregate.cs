@@ -70,12 +70,8 @@ public class GroupAggregate:AggregateRoot
         _tasks.Add((@event.TaskId, @event.UserId));
     }
 
-    public void RemoveUser(Guid authorId, Guid userId)
+    public void RemoveUser(Guid? authorId, Guid userId)
     {
-        if (_authorId!=authorId)
-        {
-            throw new InvalidOperationException("Данный пользователь не имеет прав для добавления пользователей!");
-        }
         if (!_isActive)
         {
             throw new InvalidOperationException("Данная группа удалена!");
@@ -90,6 +86,15 @@ public class GroupAggregate:AggregateRoot
         {
             throw new InvalidOperationException("Нельзя удалить автора группы!");
         }
+        if (authorId==null)
+        {
+            RaiseEvent(new GroupUserRemovedEvent(){Id = _id, UserId = userId});
+        }
+        if (_authorId!=authorId)
+        {
+            throw new InvalidOperationException("Данный пользователь не имеет прав для добавления пользователей!");
+        }
+        
         RaiseEvent(new GroupUserRemovedEvent(){ Id = _id, UserId = userId});
     }
 

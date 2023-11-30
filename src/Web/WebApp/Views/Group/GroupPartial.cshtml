@@ -28,9 +28,19 @@
                         
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" data-bs-theme="dark">
-                        <li><a class="dropdown-item" href="#">Добавить участника</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#">Удалить группу</a></li>
+                        
+                        @if (User.Claims.FirstOrDefault(u => u.Type == "sub").Value == Model.AuthorId.ToString())
+                        {
+                            <li><a class="dropdown-item" href="#">Добавить участника</a></li>
+                            <li><a class="dropdown-item" href="#">Удалить участника</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" asp-action="RemoveGroup" asp-route-groupId="@Model.Id">Удалить группу</a></li>
+                        }
+                        else
+                        {
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" asp-action="LeaveTheGroup" asp-route-groupId="@Model.Id">Покинуть группу</a></li>
+                        }
                     </ul>
                 </li>
             </ul>

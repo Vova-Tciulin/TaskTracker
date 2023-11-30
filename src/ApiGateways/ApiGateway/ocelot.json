@@ -43,7 +43,7 @@
         }
       ],
       "UpstreamPathTemplate": "/group/{everything}",
-      "UpstreamHttpMethod": [ "POST","DELETE"],
+      "UpstreamHttpMethod": [ "POST","DELETE", "PUT"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": ["groupCmdApi"]
