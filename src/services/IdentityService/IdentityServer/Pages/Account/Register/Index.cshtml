@@ -15,15 +15,25 @@
                 </div>
                 <div class="card-body">
                     <form asp-route="Register">
-                        <input type="hidden" asp-for="Input.ReturnUrl" />
+                        <h1>@Model.Input.ReturnUrl</h1>
+                        <input type="hidden" asp-for="Input.ReturnUrl"/>
                         <div class="form-group">
                             <label asp-for="Input.Email"></label>
                             <input class="form-control" placeholder="email" asp-for="Input.Email" autofocus>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Input.Name"></label>
-                            <input class="form-control" placeholder="name" asp-for="Input.Name" autofocus>
+                            <label asp-for="Input.FirstName"></label>
+                            <input class="form-control" placeholder="name" asp-for="Input.FirstName" autofocus>
                         </div>
+                        <div class="form-group">
+                            <label asp-for="Input.LastName"></label>
+                            <input class="form-control" placeholder="name" asp-for="Input.LastName" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.NickName"></label>
+                            <input class="form-control" placeholder="name" asp-for="Input.NickName" autofocus>
+                        </div>
+
                         <div class="form-group">
                             <label asp-for="Input.Password"></label>
                             <input type="password" class="form-control" placeholder="password"

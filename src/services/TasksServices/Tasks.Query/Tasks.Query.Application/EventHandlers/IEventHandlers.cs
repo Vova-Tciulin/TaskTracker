@@ -11,4 +11,5 @@ public interface IEventHandlers
     Task On(TaskUpdatedDeadlineEvent @event);
     Task On(TaskUpdatedTaskEvent @event);
     Task On(TaskUpdatedTitleEvent @event);
+    Task On(TaskReturnToNewState @event);
 }

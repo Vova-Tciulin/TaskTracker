@@ -4,6 +4,7 @@ using Tasks.Cmd.Application.Features.Commands.CompleteTask;
 using Tasks.Cmd.Application.Features.Commands.CreateTask;
 using Tasks.Cmd.Application.Features.Commands.ExecuteTask;
 using Tasks.Cmd.Application.Features.Commands.RemoveTask;
+using Tasks.Cmd.Application.Features.Commands.ReturnTaskToNew;
 using Tasks.Cmd.Application.Features.Commands.UpdateTask;
 
 namespace Tasks.Cmd.Api.Mapper;
@@ -17,5 +18,6 @@ public class CommandProfile:Profile
         CreateMap<ExecuteTaskDto, ExecuteTaskCommand>();
         CreateMap<UpdateTaskDto, UpdateTaskCommand>();
         CreateMap<CreateTaskDto, TaskDto>();
+        CreateMap<ReturnTaskToNewDto, ReturnTaskToNewCommand>();
     }
 }

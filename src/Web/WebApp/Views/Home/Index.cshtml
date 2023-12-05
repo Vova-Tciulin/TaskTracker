@@ -46,23 +46,157 @@
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>Qrauzeer</strong>
+                <strong>@User.Identity.Name</strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                 <li><a class="dropdown-item" href="#">Профиль</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Выход</a></li>
+                <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Выход</a></li>
             </ul>
         </div>
     </div>
     
-    <!-- Окно задач -->
+    <!-- Окно группы -->
     <div class="container-fluid" id="mainContent" style="background-image: url(images/backgroundImg.jpg);background-size:auto 110%; background-repeat: no-repeat;">
         
     </div>
 </main>
         
         
+
+<div id="placeholder" hidden>
+    
+<div class="container-fluid p-0" id="groupInfo">
+   
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border border-2 border-secondary rounded-3 mb-2" style="--bs-border-opacity: .5;">
+            
+            
+            <div class=" collapse navbar-collapse">
+                
+            </div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown text-white">
+                    <a class="nav-link dropdown-toggle disabled" href="#"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Участники
+                    </a>
+                    
+                </li>
+                <li class="nav-item dropdown text-white">
+                    <a class="nav-link dropdown-toggle no-caret disabled" href="#"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-three-dots text-secondary" viewBox="0 2 16 16">
+                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                        </svg>
+                        
+                    </a>
+                  
+                </li>
+            </ul>
+        </nav>
+
+    <div class="row justify-content-center">
+        
+        <!-- кололнка новых задач -->
+        <div class="overflow-auto task-card col-md-3 rounded bg-dark border border-2 border-secondary rounded-3 m-1" style="--bs-border-opacity: .5;">
+            <p class="text-white">Нужно сделать</p>
+            <!-- карточки -->
+            
+                <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3" style="--bs-border-opacity: .5;" >
+                    <div>
+                        <div class="container">
+                            <div class="row justify-content-evenly p-0">
+                                <div class="col">
+                                    <p class="placeholder-glow text-start p-0 col-12">
+                                        <span class="col-6 placeholder placeholder-lg bg-light rounded-3"></span>
+                                    </p>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn mt-2   w-100 h-100" type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseExample">
+                            
+                            <p class="placeholder-glow text-start p-0 col-12">
+                                <span class="col-4 placeholder placeholder-lg bg-light rounded-3"></span>
+                            </p>
+                            <p class="placeholder-glow text-start p-0 col-12">
+                                <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
+                            </p>
+                        </button>
+
+                    </div>
+                    <div>
+                        <p class="placeholder-glow text-start p-0 col-12">
+                            <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
+                        </p>
+                        
+                    </div>
+                </div>
+            
+            
+            <!-- создание карточки -->
+            <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3 " style="--bs-border-opacity: .5;">
+                <p class="placeholder-glow p-0 m-0">
+                    <button  type="button" class="btn p-1 m-0 disabled placeholder">
+                        <p class="text-white m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                            <span>Создать задачу</span>
+                        </p>
+                    </button>
+                    
+                </p>
+                
+            </div>
+        </div>
+
+        <!-- колонка задач на выполнении -->
+        <div class="col-md-3 task-card rounded bg-dark border border-2 border-secondary rounded-3 m-1 overflow-auto" style="--bs-border-opacity: .5;">
+            <p class="text-white">На выполнении</p>
+            <!-- карточки -->
+            <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3" style="--bs-border-opacity: .5;" >
+                <div>
+                    <div class="container">
+                        <div class="row justify-content-evenly p-0">
+                            <div class="col">
+                                <p class="placeholder-glow text-start p-0 col-12">
+                                    <span class="col-6 placeholder placeholder-lg bg-light rounded-3"></span>
+                                </p>
+                                                
+                            </div>
+                        </div>
+                    </div>
+                                    
+                    <button class="btn mt-2   w-100 h-100" type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseExample">
+                                        
+                        <p class="placeholder-glow text-start p-0 col-12">
+                            <span class="col-4 placeholder placeholder-lg bg-light rounded-3"></span>
+                        </p>
+                        <p class="placeholder-glow text-start p-0 col-12">
+                            <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
+                        </p>
+                    </button>
+            
+                </div>
+                <div>
+                    <p class="placeholder-glow text-start p-0 col-12">
+                        <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
+                    </p>
+                                    
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- колонка завершенных задач -->
+        <div class="overflow-auto task-card col-md-3 rounded bg-dark border border-2 border-secondary rounded-3 m-1 " style="--bs-border-opacity: .5;">
+            <p class="text-white">Готово</p>
+            
+        </div>
+    </div>
+</div>
+
+</div>
 
 <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     
@@ -81,20 +215,34 @@
 
 
 
+
+
 <script >
     async function getGroup(groupId){
         const url='@Url.Action("GetGroup", "Group")'+`?groupId=${groupId}`;
+        
+       var navItems = document.getElementsByClassName('active');
+                   for (var i = 0; i < navItems.length; i++) {
+                       navItems[i].classList.remove('active');
+                   }
+                   var btn= document.getElementById(groupId);
+                   btn.classList.add('active');
+                   
+       var placeholder= document.getElementById('placeholder');
+       placeholder.hidden=false;
+       document.getElementById('mainContent').innerHTML=placeholder.innerHTML;
+                   
         const response=await fetch(url);
         if (response.ok){
             const group = await response.text();
-            var navItems = document.getElementsByClassName('active');
-            for (var i = 0; i < navItems.length; i++) {
-                navItems[i].classList.remove('active');
-            }
-            var btn= document.getElementById(groupId);
-            btn.classList.add('active');
-            
+           
             document.getElementById('mainContent').innerHTML = group;
+            placeholder.hidden=true;
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
         }
     }
  
@@ -108,7 +256,12 @@
                 document.getElementById('createTask').innerHTML = createTaskView;
                 $('#createTask').modal('show');
             }
-        }
+            else{
+                const statusCode = response.status;
+                const statusText = await response.text();
+                alert(`Error: ${statusCode} - ${statusText}`);
+            }
+    }
     
     async function createGroup(){
         const url= '@Url.Action("CreateGroup", "Group")';
@@ -119,7 +272,12 @@
             const createGroupView= await response.text();
             document.getElementById('createGroup').innerHTML = createGroupView;
             $('#createGroup').modal('show');
-        }           
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
     }
        
     
@@ -136,11 +294,22 @@
                 const group = await responseGroup.text();
                 document.getElementById('mainContent').innerHTML = group;
             }
+            else{
+                const statusCode = response.status;
+                const statusText = await responseGroup.text();
+                alert(`Error: ${statusCode} - ${statusText}`);
+            }
         }
+        else{
+            const statusCode = response.status;
+           const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+        
     }
     
-    async function changeTaskState(taskId, currentState, groupId){
-        const url= '@Url.Action("ChangeTaskState", "Task")'+`?taskId=${taskId}`+`&currentState=${currentState}`;
+    async function changeTaskState(taskId, currentState,newState, groupId){
+        const url= '@Url.Action("ChangeTaskState", "Task")'+`?taskId=${taskId}`+`&currentState=${currentState}`+`&newState=${newState}`;
         const response= await fetch(url,{
             method: 'PUT'    
         });
@@ -151,7 +320,17 @@
                 const group = await responseGroup.text();
                 document.getElementById('mainContent').innerHTML = group;
             }
+            else{
+                const statusCode = responseGroup.status;
+                const statusText = await responseGroup.text();
+                alert(`Error: ${statusCode} - ${statusText}`);
+            }
         }  
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
     }
     
    

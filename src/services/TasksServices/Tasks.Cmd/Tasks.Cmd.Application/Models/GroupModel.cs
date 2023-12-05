@@ -4,5 +4,6 @@ public class GroupModel
 {
     public Guid Id { get; set; }
     public Guid AuthorId { get; set; }
+    public List<TaskModel> Tasks { get; set; }
     public List<UserModel> Users { get; set; }
 }

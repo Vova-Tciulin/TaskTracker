@@ -22,6 +22,7 @@ public static class MongoConfig
             cm.AddKnownType(typeof(TaskUpdatedDeadlineEvent));
             cm.AddKnownType(typeof(TaskUpdatedTaskEvent));
             cm.AddKnownType(typeof(TaskUpdatedTitleEvent));
+            cm.AddKnownType(typeof(TaskReturnToNewState));
         });
 
         BsonClassMap.RegisterClassMap<TaskCompletedEvent>(cm =>
@@ -64,6 +65,12 @@ public static class MongoConfig
         {
             cm.AutoMap();
             cm.SetDiscriminator(nameof(TaskUpdatedTitleEvent));
+        });
+        
+        BsonClassMap.RegisterClassMap<TaskReturnToNewState>(cm =>
+        {
+            cm.AutoMap();
+            cm.SetDiscriminator(nameof(TaskReturnToNewState));
         });
         
         return services;

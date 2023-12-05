@@ -1,7 +1,7 @@
 ﻿using TaskTracker.Aggregators.HttpExtensions;
 using TaskTracker.Aggregators.Models;
 
-namespace TaskTracker.Aggregators.Services;
+namespace TaskTracker.Aggregators.Services.Task;
 
 public class TaskService:ITaskService
 {

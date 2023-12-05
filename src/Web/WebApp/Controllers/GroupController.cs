@@ -27,8 +27,9 @@ public class GroupController:Controller
     {
         _logger.LogInformation($"invoke getGroup with id: {groupId}");
         var groupDto = await _groupService.GetGroupAggregatorById(groupId);
+        
         var groupVm = _map.Map<GroupAggregatorVm>(groupDto);
-
+        
         return PartialView("GroupPartial", groupVm);
     }
 

@@ -8,6 +8,7 @@ public static class ApiUrls
     public static string RemoveTaskUrl(string baseUrl, string taskId) => $"{baseUrl}/task/removeTask?taskId={taskId}";
     public static string ExecuteTaskUrl(string baseUrl) => $"{baseUrl}/task/executeTask";
     public static string CompleteTaskUrl(string baseUrl) => $"{baseUrl}/task/completeTask";
+    public static string ReturnTaskToNewState(string baseUrl) => $"{baseUrl}/task/ReturnTaskToNew";
     
     public static string GetTaskUrl(string baseUrl, Guid taskId) => $"{baseUrl}/task/getTask?taskId={taskId}";
     

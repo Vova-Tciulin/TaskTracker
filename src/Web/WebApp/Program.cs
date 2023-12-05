@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using WebApp.Extensions;
 using WebApp.Services;
 using WebApp.Services.HttpExtensions;
 using WebApp.Services.Moq;
@@ -46,14 +47,20 @@ builder.Services.AddAuthentication(opt =>
     .AddOpenIdConnect("oidc", opt =>
     {
         opt.RequireHttpsMetadata = false;
-        
         opt.Events.OnRedirectToIdentityProvider = context =>
         {
-            // Intercept the redirection so the browser navigates to the right URL in your host
             context.ProtocolMessage.IssuerAddress = "http://localhost:8080/connect/authorize";
             return Task.CompletedTask;
         };
+        
+        opt.Events.OnRedirectToIdentityProviderForSignOut = context =>
+        {
+            context.ProtocolMessage.IssuerAddress = "http://localhost:8080/connect/endsession";
+            return Task.CompletedTask;
+        };
 
+        opt.RefreshOnIssuerKeyNotFound = true;
+        opt.RefreshInterval= TimeSpan.FromSeconds(2);
         
         opt.SignInScheme = "Cookies";
         opt.Authority = builder.Configuration["IdentityServerUrl"];
@@ -71,10 +78,11 @@ builder.Services.AddAuthentication(opt =>
         opt.Scope.Add("taskCmdApi");
         opt.Scope.Add("groupCmdApi");
         opt.Scope.Add("aggregatorsApi");
+        opt.Scope.Add("IdentityApi");
     });
-    
-    
 
+
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 
@@ -84,6 +92,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -97,6 +107,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Index}/{id?}");
 
 app.Run();
+

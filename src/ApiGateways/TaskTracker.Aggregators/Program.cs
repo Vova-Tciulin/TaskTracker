@@ -1,5 +1,8 @@
 using TaskTracker.Aggregators.HttpClientHandlers;
 using TaskTracker.Aggregators.Services;
+using TaskTracker.Aggregators.Services.Group;
+using TaskTracker.Aggregators.Services.Identity;
+using TaskTracker.Aggregators.Services.Task;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +27,16 @@ builder.Services.AddHttpClient<IGroupService, GroupService>(o =>
         o.BaseAddress = new Uri(builder.Configuration["Services:GroupQueryUrl"]);
     })
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
 builder.Services.AddHttpClient<ITaskService, TaskService>(o =>
     {
         o.BaseAddress = new Uri(builder.Configuration["Services:TaskQueryUrl"]);
+    })
+    .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+builder.Services.AddHttpClient<IIdentityService, IdentityService>(o =>
+    {
+        o.BaseAddress = new Uri(builder.Configuration["Services:IdentityServerUrl"]);
     })
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 

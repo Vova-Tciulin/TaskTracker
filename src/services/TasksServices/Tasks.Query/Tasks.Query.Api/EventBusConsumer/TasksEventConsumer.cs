@@ -83,6 +83,16 @@ public class TasksEventConsumer:IConsumer<EventMessage>
                 _logger.LogInformation($"Event : {@event.Type} was applied");
                 break;
             }
+
+            case "TaskReturnToNewState":
+            {
+                var @event = JsonSerializer.Deserialize<TaskReturnToNewState>(context.Message.Message);
+                
+                await _eventHandler.On(@event);
+                _logger.LogInformation($"Event : {@event.Type} was applied");
+                break;
+            }
+            
             default:
             {
                 _logger.LogWarning($"{@context.Message.EventType} doesn't supported");

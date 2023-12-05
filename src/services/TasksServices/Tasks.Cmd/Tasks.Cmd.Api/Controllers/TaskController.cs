@@ -10,6 +10,7 @@ using Tasks.Cmd.Application.Features.Commands.CompleteTask;
 using Tasks.Cmd.Application.Features.Commands.CreateTask;
 using Tasks.Cmd.Application.Features.Commands.ExecuteTask;
 using Tasks.Cmd.Application.Features.Commands.RemoveTask;
+using Tasks.Cmd.Application.Features.Commands.ReturnTaskToNew;
 using Tasks.Cmd.Application.Features.Commands.UpdateTask;
 
 namespace Tasks.Cmd.Api.Controllers;
@@ -131,6 +132,17 @@ public class TaskController:ControllerBase
 
         return Ok();
     }
-    
+
+    [HttpPut]
+    [Route("[action]")]
+    public async Task<IActionResult> ReturnTaskToNew([FromBody] ReturnTaskToNewDto model)
+    {
+        _logger.LogInformation($"ReturnTaskToNew with model: {JsonSerializer.Serialize(model)}");
+
+        var command = _map.Map<ReturnTaskToNewCommand>(model);
+        await _mediator.Send(command);
+
+        return Ok();
+    }
     
 }

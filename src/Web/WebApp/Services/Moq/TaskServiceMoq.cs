@@ -26,10 +26,11 @@ public class TaskServiceMoq:ITaskService
         throw new NotImplementedException();
     }
 
-    public Task ChangeTaskState(ChangeTaskStateDto model, string currentTaskState)
+    public Task ChangeTaskState(ChangeTaskStateDto model, string currentTaskState, string newTaskState)
     {
         throw new NotImplementedException();
     }
+
 
     public async Task<TaskDto> GetTaskById(Guid taskId)
     {

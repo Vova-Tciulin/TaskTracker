@@ -16,6 +16,8 @@ public class TaskAggregate:AggregateRoot
     
     public Guid GroupId => _groupId;
     public DateTime TaskCreated => _taskCreated;
+    public TaskState TaskState => _state;
+    public Guid? WorkerId => _workerId;
 
     public TaskAggregate()
     {
@@ -173,6 +175,32 @@ public class TaskAggregate:AggregateRoot
     private void Apply(TaskUpdatedTitleEvent @event)
     {
         
+    }
+
+    public void ReturnTaskToNewState(Guid workerId)
+    {
+        if (_workerId!=workerId)
+        {
+            throw new InvalidOperationException("Данный пользователь не работает над этой задачей!");
+        }
+
+        if (!_isActive)
+        {
+            throw new InvalidOperationException("Данная задача удалена!");
+        }
+        
+        RaiseEvent(new TaskReturnToNewState()
+        {
+            Id = _id,
+            WorkerId = workerId
+        });
+
+    }
+
+    private void Apply(TaskReturnToNewState @event)
+    {
+        _workerId = null;
+        _state = TaskState.New;
     }
     
 }

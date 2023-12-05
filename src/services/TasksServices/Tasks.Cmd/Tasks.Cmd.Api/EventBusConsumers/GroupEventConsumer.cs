@@ -4,6 +4,7 @@ using MassTransit;
 using MediatR;
 using Tasks.Cmd.Api.Models;
 using Tasks.Cmd.Application.Features.Commands.RemoveTask;
+using Tasks.Cmd.Application.Features.Commands.RemoveWorkerFromTasks;
 
 namespace Tasks.Cmd.Api.EventBusConsumers;
 
@@ -35,6 +36,18 @@ public class GroupEventConsumer:IConsumer<EventMessage>
                 }
                 break;
             }
+            case "GroupUserRemovedEvent":
+            {
+                var model = JsonSerializer.Deserialize<RemoveUserFromGroup>(context.Message.Message);
+
+                await _mediator.Send(new RemoveWorkerFromTasksCommand()
+                {
+                    GroupId = model.Id,
+                    WorkerId = model.UserId
+                });
+                break;
+            }
+            
             default:
             {
                 _logger.LogWarning($"{@context.Message.EventType} doesn't supported");

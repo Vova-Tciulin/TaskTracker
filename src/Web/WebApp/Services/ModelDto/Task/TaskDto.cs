@@ -1,4 +1,6 @@
-﻿namespace WebApp.Services.ModelDto.Task;
+﻿using WebApp.Services.ModelDto.Group;
+
+namespace WebApp.Services.ModelDto.Task;
 
 public class TaskDto
 {
@@ -12,4 +14,5 @@ public class TaskDto
     public DateTime TaskCreated { get; set; }
     public DateTime DeadLine { get; set; }
     public DateTime? CompletedDateTime { get; set; }
+    public UserDto User { get; set; } = new();
 }

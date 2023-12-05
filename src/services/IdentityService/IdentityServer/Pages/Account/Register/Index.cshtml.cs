@@ -47,8 +47,10 @@ public class IndexModel : PageModel
                 {
                     UserName = Input.Email,
                     Email = Input.Email,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
                     EmailConfirmed = true,
-                    NickName = Input.Name
+                    NickName = Input.NickName
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -71,9 +73,11 @@ public class IndexModel : PageModel
                     await _userManager.AddClaimsAsync(user, new Claim[] {
                         new Claim(JwtClaimTypes.Name,Input.Email),
                         new Claim(JwtClaimTypes.Email,Input.Email),
+                        new Claim(JwtClaimTypes.NickName, Input.NickName)
                         //new Claim(JwtClaimTypes.Role,Input.RoleName)
                     });
 
+                    return RedirectToPage("Login", returnUrl);
                     var loginresult = await _signInManager.PasswordSignInAsync(
                         Input.Email, Input.Password, false, lockoutOnFailure: true);
 

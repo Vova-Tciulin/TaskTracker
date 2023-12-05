@@ -20,6 +20,7 @@ public static class IdentityConfig
         new List<ApiScope>()
         {
             new ApiScope("taskQueryApi", "Task query service api"),
+            new ApiScope("IdentityApi", "identity api controllers"),
             new ApiScope("taskCmdApi","Task command api"),
             new ApiScope("groupQueryApi","Group query api"),
             new ApiScope("groupCmdApi","Group command api"),
@@ -33,6 +34,10 @@ public static class IdentityConfig
             new ApiResource("taskQueryApi", "Task query service api")
             {
                 Scopes = { "taskQueryApi" }
+            },
+            new ApiResource("IdentityApi", "identity api controllers")
+            {
+                Scopes = { "IdentityApi" }
             },
             new ApiResource("taskCmdApi", "Task command api")
             {
@@ -56,6 +61,17 @@ public static class IdentityConfig
     public static IEnumerable<Client> GetClients(IConfiguration configuration) =>
         new List<Client>()
         {
+            new Client
+            {
+                ClientId = "identity-service",
+                ClientSecrets = new[] { new Secret("identitySecret".Sha256()) },
+                AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                AllowedScopes = 
+                {
+                    "openId",
+                    "IdentityApi"
+                }
+            },
             new Client
             {
                 ClientId = "taskQuery-service",
@@ -107,6 +123,7 @@ public static class IdentityConfig
                 ClientId = "mvc-client",
                 AllowedGrantTypes = GrantTypes.Hybrid,
                 RedirectUris = new List<string>{ $"{configuration["WebClientUrl"]}/signin-oidc" },
+                PostLogoutRedirectUris = new List<string>{ $"{configuration["WebClientUrl"]}/signout-callback-oidc"},
                 RequirePkce = false,
                 AllowedScopes =
                 {
@@ -116,7 +133,8 @@ public static class IdentityConfig
                     "taskCmdApi",
                     "groupQueryApi",
                     "groupCmdApi",
-                    "aggregatorsApi"
+                    "aggregatorsApi",
+                    "IdentityApi"
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha256()) },
             },
@@ -131,7 +149,8 @@ public static class IdentityConfig
                     IdentityServerConstants.StandardScopes.Profile,
                     "taskQueryApi",
                     "groupQueryApi",
-                    "aggregatorsApi"
+                    "aggregatorsApi",
+                    "IdentityApi"
                 },
                 ClientSecrets = { new Secret("aggregatorsSecret".Sha256()) },
             },
@@ -149,7 +168,8 @@ public static class IdentityConfig
                     "taskCmdApi",
                     "groupQueryApi",
                     "groupCmdApi",
-                    "aggregatorsApi"
+                    "aggregatorsApi",
+                    "IdentityApi"
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha256()) },
             }

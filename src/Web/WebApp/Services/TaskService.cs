@@ -35,7 +35,11 @@ public class TaskService:ITaskService
         var response = await _client.PutAsJsonAsync(uri, model);
         _logger.LogInformation($"[UpdateTask] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException($"Something went wrong calling the API: {msg}");
+        }
     }
 
     public async Task RemoveTask(string taskId)
@@ -46,18 +50,34 @@ public class TaskService:ITaskService
         var response = await _client.DeleteAsync(uri);
         _logger.LogInformation($"[RemoveTask] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException($"Something went wrong calling the API: {msg}");
+        }
     }
 
-    public async Task ChangeTaskState(ChangeTaskStateDto model, string currentTaskState)
+    public async Task ChangeTaskState(ChangeTaskStateDto model,string currentTaskState, string newTaskState)
     {
-        var uri=currentTaskState=="New"? ApiUrls.ExecuteTaskUrl(_baseUrl):ApiUrls.CompleteTaskUrl(_baseUrl);
+
+        var uri = currentTaskState switch
+        {
+            "New" => ApiUrls.ExecuteTaskUrl(_baseUrl),
+            "InWork" => newTaskState == "New"
+                ? ApiUrls.ReturnTaskToNewState(_baseUrl)
+                : ApiUrls.CompleteTaskUrl(_baseUrl),
+            _ => throw new ArgumentOutOfRangeException($"данного текущего состояния не существует!")
+        };
         
         _logger.LogInformation($"[ChangeTaskState] -> Calling {uri} to change task state");
         var response = await _client.PutAsJsonAsync(uri, model);
         _logger.LogInformation($"[ChangeTaskState] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException($"Something went wrong calling the API: {msg}");
+        }
     }
 
     public async Task<TaskDto> GetTaskById(Guid taskId)

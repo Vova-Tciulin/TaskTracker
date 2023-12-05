@@ -16,4 +16,5 @@ public static class EventBusConstants
     
     public const string GroupAllEvents = "groups.*";
     public const string GroupRemovedEvents = "groups.GroupRemovedEvent";
+    public const string GroupRemovedUserEvents = "groups.GroupUserRemovedEvent";
 }

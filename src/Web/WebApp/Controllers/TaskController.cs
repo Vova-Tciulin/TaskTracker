@@ -63,15 +63,19 @@ public class TaskController:Controller
     }
 
     [HttpPut]
-    public async Task<IActionResult> ChangeTaskState(Guid taskId, string currentState)
+    public async Task<IActionResult> ChangeTaskState(Guid taskId,string currentState, string newState)
     {
-        var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
-        
-        await _taskService.ChangeTaskState(new ChangeTaskStateDto()
-        {
-            TaskId = taskId,
-            WorkerId = Guid.Parse(userId.Value),
-        }, currentState);
+       var userId = User.Claims.FirstOrDefault(u => u.Type == "sub");
+
+       _logger.LogInformation($"change taskState. CurrentState: {currentState}, newState: {newState}");
+       
+       var changeTaskStateDto = new ChangeTaskStateDto()
+       {
+           TaskId = taskId,
+           WorkerId = Guid.Parse(userId.Value),
+       };
+
+       await _taskService.ChangeTaskState(changeTaskStateDto, currentState, newState);
 
         return Ok();
     }

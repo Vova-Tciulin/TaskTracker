@@ -118,4 +118,20 @@ public class EventHandler:IEventHandlers
         _taskRepository.UpdateTask(task);
         await _taskRepository.SaveChangesAsync();
     }
+
+    public async Task On(TaskReturnToNewState @event)
+    {
+        var task = await _taskRepository.GetByIdAsync(@event.Id);
+        
+        if (task==null)
+        {
+            _logger.LogError($"Task with id: {@event.Id} was not found");
+            throw new NotFoundException($"Task with id: {@event.Id} was not found");
+        }
+
+        task.State = TaskState.New;
+        task.WorkerId = null;
+        _taskRepository.UpdateTask(task);
+        await _taskRepository.SaveChangesAsync();
+    }
 }

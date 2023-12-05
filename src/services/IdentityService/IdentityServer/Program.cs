@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
+
+//Add Automapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 //Add serilog
 builder.Host.UseSerilog((ctx, lc) => lc
@@ -40,7 +44,15 @@ builder.Services.AddIdentityServer(opt =>
     .AddInMemoryClients(IdentityConfig.GetClients(builder.Configuration))
     .AddDeveloperSigningCredential();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.Authority ="http://identityserver:80";
+        opt.Audience = "IdentityApi";
+    });
+
+
 
 var app = builder.Build();
 
@@ -52,7 +64,9 @@ app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
 
 SeedData.EnsureSeedData(app);
 
 app.Run();
+

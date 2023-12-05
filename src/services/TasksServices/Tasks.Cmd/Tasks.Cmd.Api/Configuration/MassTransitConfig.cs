@@ -40,9 +40,20 @@ public static class MassTransitConfig
                         x.ExchangeType = ExchangeType.Topic;
                         x.Durable = true;
                         x.AutoDelete = false;
+                    });
+                    
+                    c.Bind<EventMessage>(x =>
+                    {
+                        x.RoutingKey = EventBusConstants.GroupRemovedUserEvents;
+                        x.ExchangeType = ExchangeType.Topic;
+                        x.Durable = true;
+                        x.AutoDelete = false;
                 
                     });
+                    
                 });
+                
+                
             });
         });
         

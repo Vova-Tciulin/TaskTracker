@@ -61,20 +61,24 @@
                                 <div class="col">
                                     <h6 class=" text-white text-start p-0">@task.Title</h6>
                                 </div>
-                                <div class="col text-end">
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle no-caret " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots text-secondary" viewBox="0 0 16 16">
-                                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                                            </svg>
-                                        </a>
-                                        <div class="dropdown-menu " data-bs-theme="dark">
-                                            <a class="dropdown-item text-danger" href="#">Удалить</a>
-                                        </div>
+                                @if (User.Claims.FirstOrDefault(u => u.Type == "sub").Value == Model.AuthorId.ToString() ||
+                                     User.Claims.FirstOrDefault(u => u.Type == "sub").Value == task.AuthorId.ToString())
+                                {
+                                    <div class="col text-end">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle no-caret " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots text-secondary" viewBox="0 0 16 16">
+                                                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                                                </svg>
+                                            </a>
+                                            <div class="dropdown-menu " data-bs-theme="dark">
+                                                <a class="dropdown-item text-danger" href="#">Удалить</a>
+                                            </div>
                                         
-                                    </div>
+                                        </div>
                                     
-                                </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                         
@@ -102,7 +106,7 @@
                                             </svg>
                                             <span class="text-success">@task.DeadLine.ToString("dd.MM.yyyy HH:mm")</span>
                                         </p>
-                                        <p class="text-start">Author: Циулин Владимир</p>
+                                        <p class="text-start">Author: @task.User.NickName</p>
                                     </div>
                                 </div>
                             </div>
@@ -132,7 +136,7 @@
 
                     </div>
                     <div>
-                        <button onclick="changeTaskState('@task.TaskId', '@task.State', '@task.GroupId')" type="button" class="btn px-0  w-100 h-100 text-start" data-bs-toggle="modal">
+                        <button onclick="changeTaskState('@task.TaskId', '@task.State','InWork', '@task.GroupId')" type="button" class="btn px-0  w-100 h-100 text-start" data-bs-toggle="modal">
                             <p class="text-start text-white fs-6 my-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -166,7 +170,31 @@
                 <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3" style="--bs-border-opacity: .5;" id="@task.TaskId">
                     <div>
                         <button onclick="taskInfoView('@task.TaskId')" type="button" class="btn m-0" data-bs-toggle="collapse" data-bs-target="#info-@task.TaskId" aria-expanded="false" >
-                            <h6 class="card-subtitle mb-4 text-white text-start ">@task.Title</h6>
+                            <div class="container">
+                                <div class="row justify-content-evenly p-0">
+                                    <div class="col">
+                                        <h6 class=" text-white text-start p-0">@task.Title</h6>
+                                    </div>
+                                    @if (User.Claims.FirstOrDefault(u => u.Type == "sub").Value == task.WorkerId.ToString())
+                                    {
+                                        <div class="col text-end">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle no-caret " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots text-secondary" viewBox="0 0 16 16">
+                                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                                                    </svg>
+                                                </a>
+                                                <div class="dropdown-menu " data-bs-theme="dark">
+                                                    <a class="dropdown-item text-danger" onclick="changeTaskState('@task.TaskId', '@task.State','New', '@task.GroupId')" type="button">Вернуть задачу</a>
+                                                </div>
+                                                                    
+                                            </div>
+                                                                
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            
                             <!-- доп информация-->
                             <div class="collapse " id="info-@task.TaskId">
                                 <div class="card card-body bg-dark border-0 text-white p-0">
@@ -186,7 +214,7 @@
                                 </div>
                             </div>
                             
-                            <p class="text-white text-start p-0 " style="font-size: 14px">Выполняет: Циулин Владимир</p>
+                            <p class="text-white text-start p-0 " style="font-size: 14px">Выполняет: @Model.Users.Find(u=>u.Id==@task.WorkerId).NickName</p>
                             @if (task.DeadLine < DateTime.Now)
                             {
                                 <p class="text-white text-start" style="font-size: 14px">Deadline:
@@ -211,7 +239,7 @@
                         </button>
                     </div>
                     <div>
-                        <button onclick="changeTaskState('@task.TaskId', '@task.State','@task.GroupId')" type="button" class="btn p-0 text-white" data-bs-toggle="modal">
+                        <button onclick="changeTaskState('@task.TaskId', '@task.State','Finished','@task.GroupId')" type="button" class="btn p-0 text-white" data-bs-toggle="modal">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                             </svg>
@@ -241,7 +269,7 @@
                                     </p>
                                                                 
                                     <div class="mt-2" style="font-size: 14px">
-                                        <p class="text-start">Выполнял: Циулин Владимир</p>
+                                        <p class="text-start">Выполнял: @Model.Users.Find(u=>u.Id==@task.WorkerId).NickName</p>
                                         <p class="text-start">Создана:
                                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-alarm" viewBox="0 2 18 16">
                                                 <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
@@ -256,7 +284,7 @@
                                             </svg>
                                             <span >@task.DeadLine.ToString("dd.MM.yyyy HH:mm")</span>
                                         </p>
-                                        <p class="text-start">Автор: Циулин Владимир</p>
+                                        <p class="text-start">Author: @task.User.NickName</p>
                                     </div>
                                     
                                 </div>
@@ -290,5 +318,7 @@
         </div>
     </div>
 </div>
+
+
 
 

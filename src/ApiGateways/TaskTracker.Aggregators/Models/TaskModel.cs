@@ -9,6 +9,8 @@ public class TaskModel
     public string Title { get; set; }
     public string Task { get; set; }
     public int State { get; set; }
+    public DateTime TaskCreated { get; set; }
     public DateTime DeadLine { get; set; }
     public DateTime? CompletedDateTime { get; set; }
+    public UserDto User { get; set; } = new();
 }

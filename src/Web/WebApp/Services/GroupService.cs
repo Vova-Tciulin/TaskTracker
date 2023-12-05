@@ -35,7 +35,11 @@ public class GroupService: IGroupService
         var response = await _client.PutAsJsonAsync(uri, model);
         _logger.LogInformation($"[AddUserToGroup] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException($"Something went wrong calling the API: {msg}");
+        }
     }
 
     public async Task RemoveGroup(Guid groupId)
@@ -46,7 +50,11 @@ public class GroupService: IGroupService
         var response = await _client.DeleteAsync(uri);
         _logger.LogInformation($"[RemoveGroup] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException($"Something went wrong calling the API: {msg}");
+        }
     }
 
     public async Task RemoveUserFromGroup(RemoveUserFromGroupDto model)
@@ -57,7 +65,11 @@ public class GroupService: IGroupService
         var response = await _client.PutAsJsonAsync(uri, model);
         _logger.LogInformation($"[RemoveUserFromGroup] -> response code {response.StatusCode}");
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var msg = await response.Content.ReadAsStringAsync();
+            throw new ApplicationException($"Something went wrong calling the API: {msg}");
+        }
     }
 
     public async Task<GroupAggregatorDto> GetGroupAggregatorById(string groupId)

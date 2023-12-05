@@ -15,7 +15,7 @@ public class SeedData
         {
             var context = scope.ServiceProvider.GetService<IdentityDb>();
             
-            int maxAttempts = 3;
+            int maxAttempts = 4;
             int attemptCount = 0;
             int delay = 5;
             
@@ -23,6 +23,7 @@ public class SeedData
             {
                 try
                 {
+                    Task.Delay(TimeSpan.FromSeconds(delay)).Wait();
                     Log.Information($"Attempt {attemptCount+1} to make a database migration");
                     context.Database.Migrate();
                     break;
@@ -32,8 +33,7 @@ public class SeedData
                     Log.Error("A database migration error occurred");
 
                     attemptCount++;
-                    Task.Delay(TimeSpan.FromSeconds(delay)).Wait();
-                    delay += 5;
+                    
                 }
             }
 
@@ -43,6 +43,7 @@ public class SeedData
             {
                 alice = new User
                 {
+                    Id = "dc06278d-a0fa-47db-b885-dc94490f381a",
                     UserName = "AliceSmith@email.com",
                     Email = "AliceSmith@email.com",
                     NickName = "AliceNickName",

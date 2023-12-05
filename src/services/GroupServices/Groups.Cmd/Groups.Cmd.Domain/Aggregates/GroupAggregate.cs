@@ -86,13 +86,9 @@ public class GroupAggregate:AggregateRoot
         {
             throw new InvalidOperationException("Нельзя удалить автора группы!");
         }
-        if (authorId==null)
+        if (authorId!=null && _authorId!=authorId)
         {
-            RaiseEvent(new GroupUserRemovedEvent(){Id = _id, UserId = userId});
-        }
-        if (_authorId!=authorId)
-        {
-            throw new InvalidOperationException("Данный пользователь не имеет прав для добавления пользователей!");
+            throw new InvalidOperationException("Данный пользователь не имеет прав для удаления пользователя!");
         }
         
         RaiseEvent(new GroupUserRemovedEvent(){ Id = _id, UserId = userId});
