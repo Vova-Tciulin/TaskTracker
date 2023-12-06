@@ -37,19 +37,20 @@ public class TaskController:Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTask(CreateTaskVm model)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskVm model)
     {
         _logger.LogInformation($"model: {JsonSerializer.Serialize(model)}");
 
-        await _taskService.CreateTask(new CreateTaskDto()
+        var newTaskDto= await _taskService.CreateTask(new CreateTaskDto()
         {
             GroupId = model.GroupId,
             Task = model.Task,
             Title = model.Title,
             DeadLine = DateTime.Parse(model.DeadLine)
         });
-        
-        return RedirectToAction("Index","Home");
+
+        var taskVm = _map.Map<TaskVm>(newTaskDto);
+        return RedirectToAction("GetGroup", "Group", new { model.GroupId });
     }
 
    
@@ -79,4 +80,5 @@ public class TaskController:Controller
 
         return Ok();
     }
+    
 }

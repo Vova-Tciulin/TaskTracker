@@ -302,7 +302,7 @@
         }
         else{
             const statusCode = response.status;
-           const statusText = await response.text();
+            const statusText = await response.text();
             alert(`Error: ${statusCode} - ${statusText}`);
         }
         
@@ -333,5 +333,50 @@
         }
     }
     
+    async function removeTask(taskId){
+        const url= '@Url.Action("RemoveTask", "Task")'+`?taskId=${taskId}`;
+        const response= await fetch(url,{
+            method: 'DELETE'    
+        });
+        if (response.ok){
+            const elem= document.getElementById('newTasks');
+            const child= document.getElementById('task_'+taskId);
+            elem.removeChild(child);
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+    }
+    
+    async function createTask(){
+        const url= '@Url.Action("CreateTask", "Task")';
+       
+        const response= await fetch(url,{
+            method: 'POST',
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({
+                groupId: document.getElementById('taskGroupIdInput').value,
+                title: document.getElementById('taskTitleInput').value,
+                task: document.getElementById('taskDescriptionInput').value,
+                deadLine: document.getElementById('taskDeadlineInput').value,
+            })
+        });
+        
+        if (response.ok){
+            $('#createTask').modal('hide')
+            const group = await response.text();  
+            document.getElementById('mainContent').innerHTML = group;
+            
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+            
+                
+    }
    
 </script>
