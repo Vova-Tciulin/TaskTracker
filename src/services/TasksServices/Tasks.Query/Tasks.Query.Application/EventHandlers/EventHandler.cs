@@ -66,6 +66,7 @@ public class EventHandler:IEventHandlers
             throw new NotFoundException($"Task with id: {@event.Id} was not found");
         }
 
+        task.StartOfExecution = @event.DateTime;
         task.WorkerId = @event.WorkerId;
         task.State = TaskState.InWork;
         
@@ -131,6 +132,7 @@ public class EventHandler:IEventHandlers
 
         task.State = TaskState.New;
         task.WorkerId = null;
+        task.StartOfExecution = null;
         _taskRepository.UpdateTask(task);
         await _taskRepository.SaveChangesAsync();
     }
