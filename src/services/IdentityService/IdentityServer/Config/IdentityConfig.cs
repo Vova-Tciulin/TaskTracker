@@ -114,7 +114,8 @@ public static class IdentityConfig
                 AllowedScopes =
                 {
                     "openId",
-                    "groupCmdApi"
+                    "groupCmdApi",
+                    "IdentityApi"
                 }
             },
             new Client()

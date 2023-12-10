@@ -2,7 +2,7 @@
 
 public class AddUserToGroup
 {
-    public Guid UserId { get; set; }
+    public string NickNameOrEmail { get; set; }
     public Guid GroupId { get; set; }
     public Guid AuthorId { get; set; }
 }

@@ -248,10 +248,65 @@
     </div>
 </div>
 
+<!-- Окно добавления пользователя-->
+<div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">добавление пользователя</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="form-group">
+                        <input id="inputUserNameOrEmail" class="form-control" placeholder="Email или NickName пользователя">
+                    </div>
+                    <input type="hidden" id="groupIdaddUser" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button onclick="addUser()" class="btn btn-danger">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
 <script >
+
+    function addUserShowModal(groupId){
+        
+        document.getElementById("groupIdaddUser").value = groupId;
+        $('#addUser').modal('show');
+    }
+    
+    async function addUser(){
+            var groupId=document.getElementById("groupIdaddUser").value;
+            var user= document.getElementById("inputUserNameOrEmail").value;
+            
+           
+            const url='@Url.Action("AddUser", "Group")'+`?groupId=${groupId}`+`&user=${user}`;
+            
+            const response= await fetch(url, {
+                        method: 'POST'
+            });
+            if (response.ok){
+                $('#addUser').modal('hide');
+                const group = await response.text();           
+                document.getElementById('mainContent').innerHTML = group;
+                
+            }
+            else{
+                const statusCode = response.status;
+                const statusText = await response.text();
+                alert(`Error: ${statusCode} - ${statusText}`);
+            }
+            
+        }
 
     async function removeUser(){
         var groupId=document.getElementById("groupIdInput").value;

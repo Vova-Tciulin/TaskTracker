@@ -12,9 +12,8 @@ public class AddUserValidator:AbstractValidator<AddUserCommand>
         RuleFor(u=>u.AuthorId)
             .NotEmpty().WithMessage("Guid не может быть пустым")
             .Must(BeAValidGuid).WithMessage("Недопустимый формат Guid");
-        RuleFor(u=>u.UserId)
-            .NotEmpty().WithMessage("Guid не может быть пустым")
-            .Must(BeAValidGuid).WithMessage("Недопустимый формат Guid");
+        RuleFor(u=>u.NickNameOrEmail)
+            .NotEmpty().NotNull().WithMessage("NickName или Email не может быть пустым!");
     }
     
     private bool BeAValidGuid(Guid guid)

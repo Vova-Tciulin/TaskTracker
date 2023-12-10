@@ -35,7 +35,7 @@
                         
                         @if (User.Claims.FirstOrDefault(u => u.Type == "sub").Value == Model.AuthorId.ToString())
                         {
-                            <li><a class="dropdown-item" >Добавить участника</a></li>
+                            <li><a onclick="addUserShowModal('@Model.Id')" class="dropdown-item" >Добавить участника</a></li>
                             <li><a onclick="removeUserShowModal(@JsonSerializer.Serialize(Model.Users), '@Model.Id')" class="dropdown-item" >Удалить участника</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" asp-action="RemoveGroup" asp-route-groupId="@Model.Id">Удалить группу</a></li>

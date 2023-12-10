@@ -83,7 +83,7 @@ public class GroupController: ControllerBase
     [HttpPut]
     public async Task<IActionResult> AddUserToGroup([FromBody] AddUserToGroup model)
     {
-        _logger.LogInformation($"Add user: {model.UserId} to group: {model.GroupId}");
+        _logger.LogInformation($"Add user: {model.NickNameOrEmail} to group: {model.GroupId}");
 
         var command = _map.Map<AddUserCommand>(model);
         var res = await _mediator.Send(command);

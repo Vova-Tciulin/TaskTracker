@@ -88,4 +88,17 @@ public class GroupController:Controller
         
         return RedirectToAction("GetGroup", "Group", new { groupId });
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddUser(string groupId, string user)
+    {
+        await _groupService.AddUserToGroup(new AddUserToGroupDto()
+        {
+            AuthorId = User.Claims.FirstOrDefault(u => u.Type == "sub").Value,
+            NickNameOrEmail = user,
+            GroupId = groupId
+        });
+        
+        return RedirectToAction("GetGroup", "Group", new { groupId });
+    }
 }
