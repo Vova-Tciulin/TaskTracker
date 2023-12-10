@@ -1,0 +1,32 @@
+﻿@model UpdateTaskVm
+
+<div class="modal-dialog" >
+    <div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Изменения карточки</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="form-group p-1">
+                    <input required type="text" class="form-control" value="@Model.Title" id="taskUpdateTitleInput" >
+                </div>
+                <div class="form-group p-1">
+                    <textarea required class="form-control" id="taskUpdateDescriptionInput" rows="3"  placeholder="@Model.Task"></textarea>
+                </div>
+                <div class="form-group p-1">
+                    <label asp-for="DeadLine">Deadline</label>
+                    <input required type="datetime-local" class="form-control" id="taskUpdateDeadlineInput" value="@Model.DeadLine">
+                    <input hidden id="taskUpdateGroupIdInput" value="@Model.GroupId" asp-for="GroupId">
+                    <input hidden id="taskUpdateTaskIdInput" value="@Model.TaskId" asp-for="GroupId">
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button onclick="updateTask()" type="submit" class="btn btn-primary text-start">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>

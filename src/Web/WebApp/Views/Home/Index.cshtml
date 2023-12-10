@@ -10,11 +10,10 @@
   
     <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            
             <span class="fs-4">Группы</span>
         </a>
         <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
+        <ul class="nav nav-pills flex-column mb-auto" id="groupsSidebar">
             <li class="nav-item">
                 <a class="btn nav-link text-white text-start p-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                     <p>
@@ -26,9 +25,15 @@
                 </a>
                 <div class="collapse" id="collapseExample">
                     <div class="card card-body bg-dark border-0 p-0">
-                        <input required type="text" class="form-control bg-dark text-white border-secondary" placeholder="Введите название">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input required type="text" class="form-control bg-dark text-white border-secondary" id="groupCreateInput" placeholder="Введите название">
+                            </div>
+                            <div class="col-md-3">
+                                <button onclick="createGroup()" class="btn text-white">Создать</button>
+                            </div>
+                        </div>
                     </div>
-                    <button onclick="createGroup()" class="btn text-white">Создать</button>
                 </div>
                 <hr>
             </li>
@@ -198,12 +203,13 @@
 
 </div>
 
+<!-- Окно создания карточки -->
 <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     
 </div>
 
-<!-- Окно информации о карточке -->
-<div class="modal fade" id="taskInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-theme="dark">
+<!-- Окно обновления карточки -->
+<div class="modal fade" id="updateTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     
 </div>
 
@@ -212,21 +218,106 @@
     
 </div>
 
+<!-- Окно информации о пользователе -->
+<div class="modal fade" id="userInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+</div>
 
+<!-- Окно удаления пользователя из группы-->
+<div class="modal fade" id="removeUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Удаления пользователя</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="form-group">
+                        <select name="" id="removeUserDropdown"></select>
+                    </div>
+                    <input type="hidden" id="groupIdInput" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button onclick="removeUser()" class="btn btn-danger">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 
 <script >
+
+    async function removeUser(){
+        var groupId=document.getElementById("groupIdInput").value;
+        var userId= document.getElementById("removeUserDropdown").value;
+        
+        console.log(groupId);
+        console.log(userId);
+        
+        const url='@Url.Action("RemoveUser", "Group")'+`?groupId=${groupId}`+`&userId=${userId}`;
+        
+        const response= await fetch(url, {
+                    method: 'DELETE'
+                   
+        });
+        if (response.ok){
+            $('#removeUser').modal('hide');
+            const group = await response.text();           
+            document.getElementById('mainContent').innerHTML = group;
+            
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+        
+    }
+
+    function removeUserShowModal(users, groupId){
+        console.log(users);
+        console.log(groupId);
+        
+        var dropdownElement = document.getElementById("removeUserDropdown");
+        
+        document.getElementById("groupIdInput").value = groupId;
+        var placeholderOption = document.createElement("option");
+        placeholderOption.value = ""; 
+        placeholderOption.text = "Выберите пользователя";
+        placeholderOption.disabled = true; 
+        dropdownElement.appendChild(placeholderOption);
+
+            
+        for (var i = 0; i < users.length; i++) {
+            var optionElement = document.createElement("option");
+            optionElement.value = users[i].Id;
+            optionElement.text = users[i].NickName;
+    
+           
+            dropdownElement.appendChild(optionElement);
+        }
+        
+        $('#removeUser').modal('show');
+        
+    }
+    
+    
+    
     async function getGroup(groupId){
-        const url='@Url.Action("GetGroup", "Group")'+`?groupId=${groupId}`;
+       const url='@Url.Action("GetGroup", "Group")'+`?groupId=${groupId}`;
         
        var navItems = document.getElementsByClassName('active');
-                   for (var i = 0; i < navItems.length; i++) {
-                       navItems[i].classList.remove('active');
-                   }
-                   var btn= document.getElementById(groupId);
-                   btn.classList.add('active');
+       for (var i = 0; i < navItems.length; i++) {
+           navItems[i].classList.remove('active');
+       }
+       var btn= document.getElementById(groupId);
+       btn.classList.add('active');
                    
        var placeholder= document.getElementById('placeholder');
        placeholder.hidden=false;
@@ -246,6 +337,31 @@
         }
     }
  
+    async function viewUser(user){
+        console.log(user);
+        const url= '@Url.Action("GetUserInfoView", "Account")';
+        const response= await fetch(url, {
+            method: 'POST',
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({
+                  userId: user.UserId,
+                  nickName: user.NickName,
+                  firstName: user.FirstName,
+                  lastName: user.LastName
+            })
+        });
+        if (response.ok){
+            const userView= await response.text();
+            document.getElementById('userInfo').innerHTML = userView;
+            $('#userInfo').modal('show');
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+    }
+    
     async function createTaskView(groupId){
             const url= '@Url.Action("CreateTask", "Task")'+`?groupId=${groupId}`;
             const response= await fetch(url, {
@@ -263,15 +379,105 @@
             }
     }
     
-    async function createGroup(){
-        const url= '@Url.Action("CreateGroup", "Group")';
+    async function updateTaskView(groupId){
+        const url= '@Url.Action("UpdateTask", "Task")'+`?taskId=${groupId}`;
         const response= await fetch(url, {
             method: 'GET'
         });
         if (response.ok){
-            const createGroupView= await response.text();
-            document.getElementById('createGroup').innerHTML = createGroupView;
-            $('#createGroup').modal('show');
+            const updateTaskView= await response.text();
+            document.getElementById('updateTask').innerHTML = updateTaskView;
+            $('#updateTask').modal('show');
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+    }
+    async function updateTask(){
+        
+        var title = document.getElementById("taskUpdateTitleInput").value;
+        var description = document.getElementById("taskUpdateDescriptionInput").value;
+        var deadline = document.getElementById("taskUpdateDeadlineInput").value;
+  
+        if (title.trim() === "" && description.trim() === "" && deadline.trim() === "") {
+           alert("одно из полей должно быть заполнено!");
+           return;
+        }
+        
+        const url= '@Url.Action("UpdateTask", "Task")';
+        
+        const response= await fetch(url,{
+            method: 'POST',
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({
+                taskId: document.getElementById("taskUpdateTaskIdInput").value,
+                groupId: document.getElementById("taskUpdateGroupIdInput").value,
+                title: title,
+                task: description,
+                deadLine: deadline,
+            })
+        });
+        
+        if (response.ok){
+            $('#updateTask').modal('hide')
+            const group = await response.text();  
+            document.getElementById('mainContent').innerHTML = group;
+        }
+        else{
+            const statusCode = response.status;
+            const statusText = await response.text();
+            alert(`Error: ${statusCode} - ${statusText}`);
+        }
+            
+                
+    }
+        
+    
+    async function createGroup(){
+        
+        var groupName= document.getElementById('groupCreateInput').value;
+        
+        if (groupName.trim() === "") {
+                   alert("Введите название группы!");
+                   return;
+        }
+        
+        const url= '@Url.Action("CreateGroup", "Group")';
+        const response= await fetch(url, {
+            method: 'POST',
+            headers: { "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify({
+                description: groupName
+            })   
+        });
+        if (response.ok){
+            groupName.value="";
+            var collapseElement = document.getElementById("collapseExample");
+                if (collapseElement) {
+                    collapseElement.classList.remove("show");
+                }
+                
+            var newGroup = await response.json();
+            
+            console.log(newGroup);
+            
+            var liElement = document.createElement("li");
+            liElement.className = "nav-item";
+            
+            var aElement = document.createElement("a");
+            aElement.className = "btn nav-link text-white py-2 text-start";
+            aElement.id = newGroup.id;
+            aElement.textContent = newGroup.description;
+            aElement.onclick = function() {
+                getGroup(newGroup.id);
+            };
+            liElement.appendChild(aElement);
+        
+            var ulElement = document.getElementById("groupsSidebar");
+            ulElement.appendChild(liElement);
+           
         }
         else{
             const statusCode = response.status;
@@ -351,16 +557,26 @@
     }
     
     async function createTask(){
+        
+        var title = document.getElementById("taskTitleInput").value;
+        var description = document.getElementById("taskDescriptionInput").value;
+        var deadline = document.getElementById("taskDeadlineInput").value;
+  
+        if (title.trim() === "" || description.trim() === "" || deadline.trim() === "") {
+           alert("Заполните все поля!");
+           return;
+        }
+        
         const url= '@Url.Action("CreateTask", "Task")';
-       
+        
         const response= await fetch(url,{
             method: 'POST',
             headers: { "Accept": "application/json", "Content-Type": "application/json" },
             body: JSON.stringify({
                 groupId: document.getElementById('taskGroupIdInput').value,
-                title: document.getElementById('taskTitleInput').value,
-                task: document.getElementById('taskDescriptionInput').value,
-                deadLine: document.getElementById('taskDeadlineInput').value,
+                title: title,
+                task: description,
+                deadLine: deadline,
             })
         });
         

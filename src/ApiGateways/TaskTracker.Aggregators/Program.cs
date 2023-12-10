@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using TaskTracker.Aggregators.HttpClientHandlers;
 using TaskTracker.Aggregators.Services;
 using TaskTracker.Aggregators.Services.Group;
@@ -40,6 +42,8 @@ builder.Services.AddHttpClient<IIdentityService, IdentityService>(o =>
     })
     .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 
@@ -56,5 +60,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
 
 app.Run();

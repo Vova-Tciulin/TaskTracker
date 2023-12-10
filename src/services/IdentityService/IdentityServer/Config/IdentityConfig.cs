@@ -121,7 +121,7 @@ public static class IdentityConfig
             {
                 ClientName = "MVC Client",
                 ClientId = "mvc-client",
-                AllowedGrantTypes = GrantTypes.Hybrid,
+                AllowedGrantTypes = new[] { "hybrid", "client_credentials" },
                 RedirectUris = new List<string>{ $"{configuration["WebClientUrl"]}/signin-oidc" },
                 PostLogoutRedirectUris = new List<string>{ $"{configuration["WebClientUrl"]}/signout-callback-oidc"},
                 RequirePkce = false,

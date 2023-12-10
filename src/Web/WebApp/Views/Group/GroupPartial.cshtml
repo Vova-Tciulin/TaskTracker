@@ -1,4 +1,6 @@
 ﻿
+
+@using System.Text.Json
 @model GroupAggregatorVm
 
 <div class="container-fluid p-0" id="groupInfo">
@@ -16,7 +18,9 @@
                     <ul class="dropdown-menu dropdown-menu-end" data-bs-theme="dark">
                         @foreach (var user in Model.Users)
                         {
-                            <li class="dropdown-item">@user.NickName<hr/></li>  
+                            <li class="dropdown-item">
+                                <a onclick="viewUser(@JsonSerializer.Serialize(user))">@user.NickName<hr/></a>
+                            </li>  
                         }
                     </ul>
                 </li>
@@ -31,8 +35,8 @@
                         
                         @if (User.Claims.FirstOrDefault(u => u.Type == "sub").Value == Model.AuthorId.ToString())
                         {
-                            <li><a class="dropdown-item" href="#">Добавить участника</a></li>
-                            <li><a class="dropdown-item" href="#">Удалить участника</a></li>
+                            <li><a class="dropdown-item" >Добавить участника</a></li>
+                            <li><a onclick="removeUserShowModal(@JsonSerializer.Serialize(Model.Users), '@Model.Id')" class="dropdown-item" >Удалить участника</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" asp-action="RemoveGroup" asp-route-groupId="@Model.Id">Удалить группу</a></li>
                         }
@@ -72,6 +76,7 @@
                                                 </svg>
                                             </a>
                                             <div class="dropdown-menu " data-bs-theme="dark">
+                                                <a onclick="updateTaskView('@task.TaskId')" class="dropdown-item" href="#">Изменить</a>
                                                 <a onclick="removeTask('@task.TaskId')" class="dropdown-item text-danger" href="#">Удалить</a>
                                             </div>
                                         
@@ -111,7 +116,7 @@
                                 </div>
                             </div>
 
-                            @if (task.DeadLine < DateTime.Now)
+                            @if (task.DeadLine < DateTime.Now.Add(TimeSpan.FromHours(3)))
                             {
                                 <p class="text-danger text-start m-0 p-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-alarm" viewBox="0 2 18 16">
@@ -208,14 +213,17 @@
                                                 <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
                                                 <path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1h-3zm1.038 3.018a6.093 6.093 0 0 1 .924 0 6 6 0 1 1-.924 0zM0 3.5c0 .753.333 1.429.86 1.887A8.035 8.035 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5zM13.5 1c-.753 0-1.429.333-1.887.86a8.035 8.035 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1z"/>
                                             </svg>
-                                            <span>@task.TaskCreated.ToString("dd.MM.yyyy HH:mm")</span>
+                                            @if (task.StartOfExecution.HasValue)
+                                            {
+                                                <span>@task.StartOfExecution.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                                            }
                                         </p>
                                     </div>
                                 </div>
                             </div>
 
                             <p class="text-white text-start p-0 " style="font-size: 14px">Выполняет: @Model.Users.Find(u => u.Id == @task.WorkerId).NickName</p>
-                            @if (task.DeadLine < DateTime.Now)
+                            @if (task.DeadLine < DateTime.Now.Add(TimeSpan.FromHours(3)))
                             {
                                 <p class="text-white text-start" style="font-size: 14px">Deadline:
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-alarm text-danger" viewBox="0 2 18 16">
@@ -289,14 +297,14 @@
                                     
                                 </div>
                             </div>
-                            @if (task.DeadLine < DateTime.Now)
+                            @if (task.DeadLine < DateTime.Now.Add(TimeSpan.FromHours(3)))
                             {
                                 <p class="text-white text-start" style="font-size: 14px">Выполнена:
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-alarm text-danger" viewBox="0 2 18 16">
                                         <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
                                         <path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1h-3zm1.038 3.018a6.093 6.093 0 0 1 .924 0 6 6 0 1 1-.924 0zM0 3.5c0 .753.333 1.429.86 1.887A8.035 8.035 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5zM13.5 1c-.753 0-1.429.333-1.887.86a8.035 8.035 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1z"/>
                                     </svg>
-                                    <span class="text-danger">@task.DeadLine.ToString("dd.MM.yyyy HH:mm")</span>
+                                    <span class="text-danger">@task.CompletedDateTime.Value.ToString("dd.MM.yyyy HH:mm")</span>
                                 </p>
                             }
                             else
@@ -306,7 +314,7 @@
                                         <path d="M8.5 5.5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5z"/>
                                         <path d="M6.5 0a.5.5 0 0 0 0 1H7v1.07a7.001 7.001 0 0 0-3.273 12.474l-.602.602a.5.5 0 0 0 .707.708l.746-.746A6.97 6.97 0 0 0 8 16a6.97 6.97 0 0 0 3.422-.892l.746.746a.5.5 0 0 0 .707-.708l-.601-.602A7.001 7.001 0 0 0 9 2.07V1h.5a.5.5 0 0 0 0-1h-3zm1.038 3.018a6.093 6.093 0 0 1 .924 0 6 6 0 1 1-.924 0zM0 3.5c0 .753.333 1.429.86 1.887A8.035 8.035 0 0 1 4.387 1.86 2.5 2.5 0 0 0 0 3.5zM13.5 1c-.753 0-1.429.333-1.887.86a8.035 8.035 0 0 1 3.527 3.527A2.5 2.5 0 0 0 13.5 1z"/>
                                     </svg>
-                                    <span class="text-success">@task.DeadLine.ToString("dd.MM.yyyy HH:mm")</span>
+                                    <span class="text-success">@task.CompletedDateTime.Value.ToString("dd.MM.yyyy HH:mm")</span>
                                 </p>
                             }
                             <p class="text-start text-secondary fs-6 my-0"> подробнее</p>

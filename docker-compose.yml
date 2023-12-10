@@ -69,6 +69,12 @@ services:
     build: 
       context: .
       dockerfile: src/Web/WebApp/Dockerfile
+    
+  webstatus:
+    image: webstatus
+    build:
+      context: .
+      dockerfile: src/Web/WebStatus/Dockerfile
 
 volumes:
   tasksEventDb_data:

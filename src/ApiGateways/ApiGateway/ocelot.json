@@ -10,8 +10,8 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/task/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "DELETE"],
+      "UpstreamPathTemplate": "/task.cmd/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": ["taskCmdApi"]
@@ -26,7 +26,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/task/{everything}",
+      "UpstreamPathTemplate": "/task.query/{everything}",
       "UpstreamHttpMethod": [ "GET"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
@@ -42,8 +42,8 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/group/{everything}",
-      "UpstreamHttpMethod": [ "POST","DELETE", "PUT"],
+      "UpstreamPathTemplate": "/group.cmd/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST","DELETE", "PUT"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": ["groupCmdApi"]
@@ -58,7 +58,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/group/{everything}",
+      "UpstreamPathTemplate": "/group.query/{everything}",
       "UpstreamHttpMethod": [ "GET"],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",

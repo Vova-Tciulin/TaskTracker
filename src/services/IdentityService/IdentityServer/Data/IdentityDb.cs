@@ -10,6 +10,7 @@ public class IdentityDb:IdentityDbContext<User>
     public IdentityDb(DbContextOptions opt)
         :base(opt)
     {
+        //Database.EnsureCreated();
         
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)

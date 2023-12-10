@@ -1,7 +1,9 @@
 using EventBus.Messages;
 using EventBus.Messages.Messages;
+using HealthChecks.UI.Client;
 using MassTransit;
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -18,6 +20,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
 //Add layers
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -59,6 +65,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
+
+
 
 //Migrate Db
 DatabaseExtensions.MigrateDatabase(app);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Models.User;
 
 namespace WebApp.Controllers;
 
@@ -36,5 +37,12 @@ public class AccountController:Controller
     {
         await HttpContext.SignOutAsync("Cookies");
         await HttpContext.SignOutAsync("oidc");
+    }
+
+    [Authorize]
+    [HttpPost]
+    public IActionResult GetUserInfoView([FromBody] UserVm model)
+    {
+        return PartialView("UserInfoPartial", model);
     }
 }

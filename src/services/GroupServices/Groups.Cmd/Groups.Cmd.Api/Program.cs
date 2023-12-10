@@ -6,12 +6,19 @@ using Groups.Cmd.Api.EventBusConsumers;
 using Groups.Cmd.Api.Extensions;
 using Groups.Cmd.Application;
 using Groups.Cmd.Infrastructure;
+using HealthChecks.UI.Client;
 using MassTransit;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddHealthChecks()
+    .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "GroupEventDb Health",
+        HealthStatus.Degraded);
 
 builder.Services.AddControllers();
 
@@ -56,5 +63,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
 
 app.Run();

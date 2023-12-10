@@ -6,10 +6,10 @@ namespace WebApp.Services;
 public class TaskService:ITaskService
 {
     private readonly HttpClient _client;
-    private readonly ILogger<GroupService> _logger;
+    private readonly ILogger<TaskService> _logger;
     private readonly string _baseUrl;
 
-    public TaskService(HttpClient client, ILogger<GroupService> logger,IConfiguration configuration)
+    public TaskService(HttpClient client, ILogger<TaskService> logger,IConfiguration configuration)
     {
         _client = client;
         _logger = logger;
@@ -84,9 +84,9 @@ public class TaskService:ITaskService
     {
         var uri=ApiUrls.GetTaskUrl(_baseUrl,taskId);
         
-        _logger.LogInformation($"[RemoveTask] -> Calling {uri} to remove the task");
+        _logger.LogInformation($"[GetTaskById] -> Calling {uri} to get task");
         var response = await _client.GetAsync(uri);
-        _logger.LogInformation($"[RemoveTask] -> response code {response.StatusCode}");
+        _logger.LogInformation($"[GetTaskById] -> response code {response.StatusCode}");
 
         return await response.ReadContentAs<TaskDto>();
     }

@@ -27,6 +27,11 @@ services:
     restart: always
     ports:
       - "1434:1433"
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P yourStrongPassword123 -Q \"SELECT 1\"" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - task-data:/var/opt/mssql
     
@@ -46,6 +51,11 @@ services:
     restart: always
     ports:
       - "1435:1433"
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P yourStrongPassword123 -Q \"SELECT 1\"" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - group-data:/var/opt/mssql
   
@@ -57,6 +67,11 @@ services:
     restart: always
     ports:
       - "1436:1433"
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P yourStrongPassword123 -Q \"SELECT 1\"" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - identity-data:/var/opt/mssql
     
@@ -66,6 +81,11 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   
   apigateway:
     container_name: apigateway
@@ -91,7 +111,8 @@ services:
       - "IdentityServer=http://identityserver:80"
       - "WebClientUrl=http://localhost:8010"
     depends_on:
-      - identityDb
+      identityDb:
+        condition: service_healthy
         
   tasks.cmd.api:
     container_name: tasks.cmd.api
@@ -104,8 +125,10 @@ services:
       - "DatabaseSettings:ConnectionString=mongodb://tasksEventDb:27017"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
-      - tasksEventDb
-      - rabbitmq
+      rabbitmq:
+         condition: service_healthy
+      tasksEventDb:
+        condition: service_started
     
   tasks.query.api:
     container_name: tasks.query.api
@@ -117,8 +140,11 @@ services:
       - ConnectionStrings__DefaultConnection=Server=tasksDb;Database=TaskDb;User=sa;Password=yourStrongPassword123;Encrypt=False;
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
-      - tasksDb
-      - rabbitmq
+      tasksDb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
        
   groups.cmd.api:
     container_name: groups.cmd.api
@@ -130,8 +156,10 @@ services:
       - "DatabaseSettings:ConnectionString=mongodb://groupsEventDb"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
-      - groupsEventDb
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      groupsEventDb:
+        condition: service_started
         
   groups.query.api:
     container_name: groups.query.api
@@ -143,8 +171,10 @@ services:
       - ConnectionStrings__DefaultConnection=Server=groupsDb;Database=GroupDb;User=sa;Password=yourStrongPassword123;Encrypt=False;
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
-      - groupsDb
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+      groupsDb:
+        condition: service_healthy
         
   tasktracker.aggregators:
     container_name: tasktracker.aggregators
@@ -170,3 +200,23 @@ services:
     depends_on:
       - apigateway
       - identityserver
+        
+  webstatus:
+    container_name: webstatus
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - HealthChecksUI__HealthChecks__0__Name=Web
+      - HealthChecksUI__HealthChecks__0__Uri=http://webapp/health
+      - HealthChecksUI__HealthChecks__1__Name=Group.Cmd.Api
+      - HealthChecksUI__HealthChecks__1__Uri=http://groups.cmd.api/health
+      - HealthChecksUI__HealthChecks__2__Name=groups.query.api
+      - HealthChecksUI__HealthChecks__2__Uri=http://groups.query.api/health
+      - HealthChecksUI__HealthChecks__3__Name=tasks.cmd.api
+      - HealthChecksUI__HealthChecks__3__Uri=http://tasks.cmd.api/health
+      - HealthChecksUI__HealthChecks__4__Name=tasks.query.api
+      - HealthChecksUI__HealthChecks__4__Uri=http://tasks.query.api/health
+      - HealthChecksUI__HealthChecks__5__Name=task.aggregator
+      - HealthChecksUI__HealthChecks__5__Uri=http://tasktracker.aggregators/api/health
+      
+    ports:
+      - "8011:80"

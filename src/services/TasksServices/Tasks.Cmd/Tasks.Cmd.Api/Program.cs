@@ -1,7 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using EventBus.Messages;
 using EventBus.Messages.Messages;
+using HealthChecks.UI.Client;
 using MassTransit;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using Serilog;
 using Tasks.Cmd.Api.Configuration;
@@ -11,6 +14,12 @@ using Tasks.Cmd.Application;
 using Tasks.Cmd.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+builder.Services.AddHealthChecks()
+    .AddMongoDb(builder.Configuration["DatabaseSettings:ConnectionString"], "TaskEventDb Health",
+        HealthStatus.Degraded);
 
 builder.Services.AddControllers();
 
@@ -30,6 +39,8 @@ builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 //Add serilog
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console());
+
+
 
 //Add MassTransit
 builder.Services.AddMassTransit(builder.Configuration);
@@ -60,5 +71,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
 
 app.Run();

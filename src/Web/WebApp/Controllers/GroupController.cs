@@ -42,7 +42,7 @@ public class GroupController:Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateGroup(CreateGroupVm model)
+    public async Task<IActionResult> CreateGroup([FromBody]CreateGroupVm model)
     {
         _logger.LogInformation($"model: {JsonSerializer.Serialize(model)}");
         
@@ -50,9 +50,8 @@ public class GroupController:Controller
         {
             Description = model.Description
         });
-
         
-        return RedirectToAction("Index","Home");
+        return Ok(newGroup);
     }
     
     public async Task<IActionResult> RemoveGroup(Guid groupId)
@@ -75,5 +74,18 @@ public class GroupController:Controller
 
         return RedirectToAction("Index", "Home");
         
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> RemoveUser(string groupId, string userId)
+    {
+        await _groupService.RemoveUserFromGroup(new RemoveUserFromGroupDto()
+        {
+            AuthorId = User.Claims.FirstOrDefault(u => u.Type == "sub").Value,
+            GroupId = groupId,
+            UserId = userId
+        });
+        
+        return RedirectToAction("GetGroup", "Group", new { groupId });
     }
 }

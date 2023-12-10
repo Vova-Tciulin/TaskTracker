@@ -14,5 +14,6 @@ public class TaskDto
     public DateTime TaskCreated { get; set; }
     public DateTime DeadLine { get; set; }
     public DateTime? CompletedDateTime { get; set; }
+    public DateTime? StartOfExecution { get; set; }
     public UserDto User { get; set; } = new();
 }

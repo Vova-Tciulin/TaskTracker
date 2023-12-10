@@ -21,9 +21,28 @@ public class AuthenticationDelegatingHandler:DelegatingHandler
 
         if (string.IsNullOrEmpty(accessToken))
         {
-            _logger.LogWarning("failed to get token");
-            throw new Exception("failed to get token");
+            _logger.LogWarning("failed to get token from httpContextAccessor");
+            TokenResponse tokenResponse;
+        
+            using (var identityClient= new HttpClient())
+            {
+                tokenResponse = await identityClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest()
+                {
+                    Address = "http://identityserver:80/connect/token",
+                    ClientId = "mvc-client",
+                    ClientSecret = "MVCSecret",
+                    Scope = "taskQueryApi taskCmdApi groupQueryApi groupCmdApi aggregatorsApi",
+                });
+            }
+        
+            if (tokenResponse.IsError|| String.IsNullOrEmpty(tokenResponse.AccessToken))
+            {
+                _logger.LogCritical($"ошибка при получении токена {tokenResponse.ErrorDescription}");
+            }
+
+            accessToken = tokenResponse.AccessToken;
         }
+       
         request.SetBearerToken(accessToken);
         
         return await base.SendAsync(request, cancellationToken);

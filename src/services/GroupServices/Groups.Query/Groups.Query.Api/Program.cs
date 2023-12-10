@@ -3,6 +3,9 @@ using Groups.Query.Api.Consumers;
 using Groups.Query.Api.Extensions;
 using Groups.Query.Application;
 using Groups.Query.Infrastructure;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 
@@ -13,6 +16,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHealthChecks()
+    .AddSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
 //Add layers
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -52,6 +58,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
 
 //Migrate Db
 DatabaseExtensions.MigrateDatabase(app);

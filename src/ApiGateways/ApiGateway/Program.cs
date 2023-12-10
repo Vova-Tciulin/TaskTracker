@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
@@ -17,12 +19,20 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddOcelot(builder.Configuration);
 
 
 var app = builder.Build();
 
 app.UseAuthorization();
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
 
 await app.UseOcelot();
 

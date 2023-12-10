@@ -3,4 +3,9 @@
 public class CreateGroupVm
 {
     public string Description { get; set; }
+
+    public CreateGroupVm()
+    {
+        
+    }
 }

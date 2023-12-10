@@ -33,7 +33,7 @@ public class TaskAggregate:AggregateRoot
             Title = title,
             Task = task,
             State = TaskState.New,
-            TaskCreated = DateTime.Now,
+            TaskCreated = DateTime.Now.Add(TimeSpan.FromHours(3)),
             DeadLine = deadline
         });
     }
@@ -119,7 +119,7 @@ public class TaskAggregate:AggregateRoot
             throw new InvalidOperationException("Данная задача уже удалена!");
         }
         
-        RaiseEvent(new TaskTakenOnWorkEvent(){Id=_id, DateTime = DateTime.Now, WorkerId = workerId});
+        RaiseEvent(new TaskTakenOnWorkEvent(){Id=_id, DateTime = DateTime.Now.Add(TimeSpan.FromHours(3)), WorkerId = workerId});
     }
 
     private void Apply(TaskTakenOnWorkEvent @event)
@@ -145,7 +145,7 @@ public class TaskAggregate:AggregateRoot
             throw new InvalidOperationException("Данная задача уже удалена!");
         }
         
-        RaiseEvent(new TaskCompletedEvent(){Id = _id, WorkerId = workerId, CompletedDateTime = DateTime.Now});
+        RaiseEvent(new TaskCompletedEvent(){Id = _id, WorkerId = workerId, CompletedDateTime = DateTime.Now.Add(TimeSpan.FromHours(3))});
     }
 
     private void Apply(TaskCompletedEvent @event)

@@ -1,7 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using WebApp.Configuration;
 using WebApp.Extensions;
 using WebApp.Services;
 using WebApp.Services.HttpExtensions;
@@ -24,6 +27,8 @@ builder.Services.AddScoped<ITaskService, TaskServiceMoq>();
 */
 
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 
@@ -38,51 +43,11 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 IdentityModelEventSource.ShowPII = true;
 
-builder.Services.AddAuthentication(opt =>
-    {
-        opt.DefaultScheme = "Cookies";
-        opt.DefaultChallengeScheme = "oidc";
-        
-    }).AddCookie("Cookies")
-    .AddOpenIdConnect("oidc", opt =>
-    {
-        opt.RequireHttpsMetadata = false;
-        opt.Events.OnRedirectToIdentityProvider = context =>
-        {
-            context.ProtocolMessage.IssuerAddress = "http://localhost:8080/connect/authorize";
-            return Task.CompletedTask;
-        };
-        
-        opt.Events.OnRedirectToIdentityProviderForSignOut = context =>
-        {
-            context.ProtocolMessage.IssuerAddress = "http://localhost:8080/connect/endsession";
-            return Task.CompletedTask;
-        };
-
-        opt.RefreshOnIssuerKeyNotFound = true;
-        opt.RefreshInterval= TimeSpan.FromSeconds(2);
-        
-        opt.SignInScheme = "Cookies";
-        opt.Authority = builder.Configuration["IdentityServerUrl"];
-        opt.ClientId = "mvc-client";
-        opt.ResponseType = "code id_token";
-        opt.SaveTokens = true;
-        opt.ClientSecret = "MVCSecret";
-        opt.GetClaimsFromUserInfoEndpoint = true;
-        
-        opt.ClaimActions.DeleteClaim("sid");
-        opt.ClaimActions.DeleteClaim("idp");
-        
-        opt.Scope.Add("taskQueryApi");
-        opt.Scope.Add("groupQueryApi");
-        opt.Scope.Add("taskCmdApi");
-        opt.Scope.Add("groupCmdApi");
-        opt.Scope.Add("aggregatorsApi");
-        opt.Scope.Add("IdentityApi");
-    });
+builder.Services.AddAuthenticationConfig(builder.Configuration);
 
 
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 
 var app = builder.Build();
 
@@ -104,6 +69,12 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    Predicate = _ => true
+});
 
 app.MapControllerRoute(
     name: "default",

@@ -80,5 +80,42 @@ public class TaskController:Controller
 
         return Ok();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> UpdateTask(Guid taskId)
+    {
+        var taskDto = await _taskService.GetTaskById(taskId);
+
+        var model = _map.Map<UpdateTaskVm>(taskDto);
+
+        return PartialView("UpdateTaskPartial",model);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> UpdateTask([FromBody] UpdateTaskVm model)
+    {
+        _logger.LogInformation($"[update task]. Model: {JsonSerializer.Serialize(model)}");
+        
+        var taskDto = await _taskService.GetTaskById(model.TaskId);
+
+        var updateTaskDto = new UpdateTaskDto()
+        {
+            TaskId = model.TaskId,
+            NewTask = model.Task==taskDto.Task? null:model.Task,
+            NewTitle = model.Title==taskDto.Title? null:model.Title,
+            NewDeadLine = DateTime.Parse(model.DeadLine)==taskDto.DeadLine? null:DateTime.Parse(model.DeadLine),
+        };
+
+        if (updateTaskDto.NewTask==null&& updateTaskDto.NewTitle==null&& updateTaskDto.NewDeadLine==null)
+        {
+            return RedirectToAction("GetGroup", "Group", new { model.GroupId });
+        }
+
+        await _taskService.UpdateTask(updateTaskDto);
+        
+        return RedirectToAction("GetGroup", "Group", new { model.GroupId });
+    }
+    
+    
     
 }
