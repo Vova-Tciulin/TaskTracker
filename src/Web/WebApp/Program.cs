@@ -8,7 +8,7 @@ using WebApp.Configuration;
 using WebApp.Extensions;
 using WebApp.Services;
 using WebApp.Services.HttpExtensions;
-using WebApp.Services.Moq;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +20,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<AuthenticationDelegatingHandler>();
 
 
-/*
-builder.Services.AddScoped<Db>();
-builder.Services.AddScoped<IGroupService, GroupServiceMoq>();
-builder.Services.AddScoped<ITaskService, TaskServiceMoq>();
-*/
+
 
 
 builder.Services.AddHealthChecks();

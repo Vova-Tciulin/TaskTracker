@@ -1,4 +1,6 @@
-﻿@model List<GroupVm>
+﻿@using Microsoft.AspNetCore.Authentication
+@using System.Security.Claims
+@model List<GroupVm>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -50,11 +52,10 @@
         <hr>
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>@User.Identity.Name</strong>
+                <strong>@User.Claims.FirstOrDefault(u => u.Type == "nickname").Value</strong>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" href="#">Профиль</a></li>
+                <li><a onclick="userShowModal()" class="dropdown-item">Профиль</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Выход</a></li>
             </ul>
@@ -71,7 +72,7 @@
 
 <div id="placeholder" hidden>
     
-<div class="container-fluid p-0" id="groupInfo">
+    <div class="container-fluid p-0" id="groupInfo">
    
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark border border-2 border-secondary rounded-3 mb-2" style="--bs-border-opacity: .5;">
             
@@ -98,12 +99,12 @@
             </ul>
         </nav>
 
-    <div class="row justify-content-center">
+        <div class="row justify-content-center">
         
-        <!-- кололнка новых задач -->
-        <div class="overflow-auto task-card col-md-3 rounded bg-dark border border-2 border-secondary rounded-3 m-1" style="--bs-border-opacity: .5;">
-            <p class="text-white">Нужно сделать</p>
-            <!-- карточки -->
+            <!-- кололнка новых задач -->
+            <div class="overflow-auto task-card col-md-3 rounded bg-dark border border-2 border-secondary rounded-3 m-1" style="--bs-border-opacity: .5;">
+                <p class="text-white">Нужно сделать</p>
+                <!-- карточки -->
             
                 <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3" style="--bs-border-opacity: .5;" >
                     <div>
@@ -138,70 +139,101 @@
                 </div>
             
             
-            <!-- создание карточки -->
-            <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3 " style="--bs-border-opacity: .5;">
-                <p class="placeholder-glow p-0 m-0">
-                    <button  type="button" class="btn p-1 m-0 disabled placeholder">
-                        <p class="text-white m-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                            </svg>
-                            <span>Создать задачу</span>
-                        </p>
-                    </button>
+                <!-- создание карточки -->
+                <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3 " style="--bs-border-opacity: .5;">
+                    <p class="placeholder-glow p-0 m-0">
+                        <button  type="button" class="btn p-1 m-0 disabled placeholder">
+                            <p class="text-white m-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                </svg>
+                                <span>Создать задачу</span>
+                            </p>
+                        </button>
                     
-                </p>
+                    </p>
                 
+                </div>
             </div>
-        </div>
 
-        <!-- колонка задач на выполнении -->
-        <div class="col-md-3 task-card rounded bg-dark border border-2 border-secondary rounded-3 m-1 overflow-auto" style="--bs-border-opacity: .5;">
-            <p class="text-white">На выполнении</p>
-            <!-- карточки -->
-            <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3" style="--bs-border-opacity: .5;" >
-                <div>
-                    <div class="container">
-                        <div class="row justify-content-evenly p-0">
-                            <div class="col">
-                                <p class="placeholder-glow text-start p-0 col-12">
-                                    <span class="col-6 placeholder placeholder-lg bg-light rounded-3"></span>
-                                </p>
+            <!-- колонка задач на выполнении -->
+            <div class="col-md-3 task-card rounded bg-dark border border-2 border-secondary rounded-3 m-1 overflow-auto" style="--bs-border-opacity: .5;">
+                <p class="text-white">На выполнении</p>
+                <!-- карточки -->
+                <div class="col  my-1 bg-body-dark p-1 border border-2 border-secondary rounded-3" style="--bs-border-opacity: .5;" >
+                    <div>
+                        <div class="container">
+                            <div class="row justify-content-evenly p-0">
+                                <div class="col">
+                                    <p class="placeholder-glow text-start p-0 col-12">
+                                        <span class="col-6 placeholder placeholder-lg bg-light rounded-3"></span>
+                                    </p>
                                                 
+                                </div>
                             </div>
                         </div>
-                    </div>
                                     
-                    <button class="btn mt-2   w-100 h-100" type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseExample">
+                        <button class="btn mt-2   w-100 h-100" type="button" data-bs-toggle="collapse"  aria-expanded="false" aria-controls="collapseExample">
                                         
-                        <p class="placeholder-glow text-start p-0 col-12">
-                            <span class="col-4 placeholder placeholder-lg bg-light rounded-3"></span>
-                        </p>
+                            <p class="placeholder-glow text-start p-0 col-12">
+                                <span class="col-4 placeholder placeholder-lg bg-light rounded-3"></span>
+                            </p>
+                            <p class="placeholder-glow text-start p-0 col-12">
+                                <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
+                            </p>
+                        </button>
+            
+                    </div>
+                    <div>
                         <p class="placeholder-glow text-start p-0 col-12">
                             <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
                         </p>
-                    </button>
-            
-                </div>
-                <div>
-                    <p class="placeholder-glow text-start p-0 col-12">
-                        <span class="col-2 placeholder placeholder-xs bg-light rounded-3"></span>
-                    </p>
                                     
+                    </div>
+                </div>
+            
+            </div>
+
+            <!-- колонка завершенных задач -->
+            <div class="overflow-auto task-card col-md-3 rounded bg-dark border border-2 border-secondary rounded-3 m-1 " style="--bs-border-opacity: .5;">
+                <p class="text-white">Готово</p>
+            
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Окно профиля-->
+<div class="modal fade" id="viewProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" >Информация о пользователе</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col">
+                        <p>NickName: @User.Claims.FirstOrDefault(u => u.Type == "nickname").Value</p>
+                    </div>
+                    <div class="col">
+                        <p>Имя: @User.Claims.FirstOrDefault(u => u.Type == "name").Value</p>
+                    </div>
+                    <div class="col">
+                        <p>Фамилия: @User.Claims.FirstOrDefault(u => u.Type == "family_name").Value</p>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
-            
-        </div>
-
-        <!-- колонка завершенных задач -->
-        <div class="overflow-auto task-card col-md-3 rounded bg-dark border border-2 border-secondary rounded-3 m-1 " style="--bs-border-opacity: .5;">
-            <p class="text-white">Готово</p>
-            
         </div>
     </div>
 </div>
 
-</div>
 
 <!-- Окно создания карточки -->
 <div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -277,6 +309,10 @@
 
 
 <script >
+
+    function userShowModal(){
+        $('#viewProfile').modal('show');
+    }
 
     function addUserShowModal(groupId){
         

@@ -12,7 +12,8 @@ public static class IdentityConfig
         new List<IdentityResource>
         {
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new IdentityResource("nickname", new []{"nickname"})
         };
     
     //области, к которым имеют возможность обратиться клиенты
@@ -135,7 +136,8 @@ public static class IdentityConfig
                     "groupQueryApi",
                     "groupCmdApi",
                     "aggregatorsApi",
-                    "IdentityApi"
+                    "IdentityApi",
+                    "nickname"
                 },
                 ClientSecrets = { new Secret("MVCSecret".Sha256()) },
             },

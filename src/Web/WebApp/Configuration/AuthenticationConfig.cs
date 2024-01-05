@@ -47,6 +47,9 @@ public static class AuthenticationConfig
             opt.Scope.Add("groupCmdApi");
             opt.Scope.Add("aggregatorsApi");
             opt.Scope.Add("IdentityApi");
+            opt.Scope.Add("nickname");
+            
+            opt.ClaimActions.MapUniqueJsonKey("nickname","nickname");
         });
 
         return service;

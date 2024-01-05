@@ -15,5 +15,6 @@ public class TaskVm
     public DateTime DeadLine { get; set; }
     public DateTime? CompletedDateTime { get; set; }
     public DateTime? StartOfExecution { get; set; }
-    public UserVm User { get; set; } = new();
+    public UserVm Author { get; set; } = new();
+    public UserVm? Worker { get; set; }
 }

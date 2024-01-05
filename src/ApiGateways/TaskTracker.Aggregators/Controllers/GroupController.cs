@@ -60,8 +60,12 @@ public class GroupController:ControllerBase
         {
             var user = groupModel.Users.FirstOrDefault(u => u.Id == task.AuthorId.ToString()) ??
                        await _identityService.GetUserInfoById(task.AuthorId);
-
-            task.User = user;
+            task.Author = user;
+            if (task.WorkerId!=null)
+            {
+                task.Worker=task.AuthorId==task.WorkerId?user: groupModel.Users.FirstOrDefault(u => u.Id == task.WorkerId.ToString()) ??
+                                                               await _identityService.GetUserInfoById(task.WorkerId.Value);
+            }
         }
         
         return Ok(groupModel);

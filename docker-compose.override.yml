@@ -30,6 +30,7 @@ services:
     healthcheck:
       test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P yourStrongPassword123 -Q \"SELECT 1\"" ]
       interval: 5s
+      
       timeout: 5s
       retries: 5
     volumes:
@@ -216,7 +217,7 @@ services:
       - HealthChecksUI__HealthChecks__4__Name=tasks.query.api
       - HealthChecksUI__HealthChecks__4__Uri=http://tasks.query.api/health
       - HealthChecksUI__HealthChecks__5__Name=task.aggregator
-      - HealthChecksUI__HealthChecks__5__Uri=http://tasktracker.aggregators/api/health
+      - HealthChecksUI__HealthChecks__5__Uri=http://tasktracker.aggregators/health
       
     ports:
       - "8011:80"

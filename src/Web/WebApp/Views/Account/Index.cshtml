@@ -5,7 +5,20 @@
     Layout = "_Layout";
 }
 
-<h1>Вход: <a asp-action="Login">тык тык </a></h1>
-
-<h1>Текущее время: @DateTime.Now</h1>
-
+<div class="d-flex h-100 text-center text-bg-dark">
+  <div class="cover-container d-flex w-100  p-3 mx-auto flex-column" style="height: 100vh;">
+    
+  
+    <main class="px-3 py-5" >
+      <h1 class="pt-5">Task tracker.</h1>
+      <p class="lead"> Ваш личный капитан в море задач: легкое управление, ясные цели, эффективная командная навигация.</p>
+      <p class="lead">
+        <a asp-action="Login" class="btn btn-lg btn-light fw-bold border-white bg-white">Войти</a>
+      </p>
+    </main>
+  
+    <footer class="mt-auto text-white-50">
+      <p>Created by <a href="https://github.com/Vova-Tciulin" class="text-white">Vova-Tciulin</a></p>
+    </footer>
+  </div>
+</div>
