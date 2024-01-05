@@ -4,8 +4,12 @@ using WebApp.Services.ModelDto.Group;
 
 namespace WebApp.Services.HttpExtensions;
 
+/// <summary>
+/// методы расширения для httpClient 
+/// </summary>
 public static class HttpClientExtensions
 {
+    //Десериализация ответа 
     public static async Task<T> ReadContentAs<T>(this HttpResponseMessage response)
     {
         if (!response.IsSuccessStatusCode)
@@ -19,6 +23,7 @@ public static class HttpClientExtensions
         return JsonSerializer.Deserialize<T>(dataAsString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
+    //Сериализация данных post запросов 
     public static async Task<HttpResponseMessage> PostAsJsonAsync<T>(this HttpClient httpClient, string url, T data)
     {
         var dataAsString = JsonSerializer.Serialize(data);

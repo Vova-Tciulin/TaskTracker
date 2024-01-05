@@ -1,7 +1,6 @@
-﻿using WebApp.Services.ModelDto;
-using WebApp.Services.ModelDto.Group;
+﻿using WebApp.Services.ModelDto.Group;
 
-namespace WebApp.Services;
+namespace WebApp.Services.Group;
 
 public interface IGroupService
 {

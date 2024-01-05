@@ -1,8 +1,11 @@
 ﻿using WebApp.Services.HttpExtensions;
 using WebApp.Services.ModelDto.Task;
 
-namespace WebApp.Services;
+namespace WebApp.Services.TaskServices;
 
+/// <summary>
+/// Сервис для обращения к микросервисам Task.cmd и Task.query
+/// </summary>
 public class TaskService:ITaskService
 {
     private readonly HttpClient _client;

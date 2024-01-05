@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.Models.Groups;
 using WebApp.Services;
+using WebApp.Services.Group;
 
 namespace WebApp.Controllers;
 

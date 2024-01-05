@@ -1,7 +1,6 @@
-﻿using WebApp.Services.ModelDto;
-using WebApp.Services.ModelDto.Task;
+﻿using WebApp.Services.ModelDto.Task;
 
-namespace WebApp.Services;
+namespace WebApp.Services.TaskServices;
 
 public interface ITaskService
 {

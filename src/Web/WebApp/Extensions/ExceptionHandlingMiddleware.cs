@@ -1,5 +1,8 @@
 ﻿namespace WebApp.Extensions;
 
+/// <summary>
+/// Middleware для обработки ошибок 
+/// </summary>
 public class ExceptionHandlingMiddleware:IMiddleware
 {
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;

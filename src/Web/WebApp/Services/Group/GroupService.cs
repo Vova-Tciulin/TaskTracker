@@ -1,8 +1,11 @@
 ﻿using WebApp.Services.HttpExtensions;
 using WebApp.Services.ModelDto.Group;
 
-namespace WebApp.Services;
+namespace WebApp.Services.Group;
 
+/// <summary>
+/// Сервис для обращения к микросервисам Group и Aggregators
+/// </summary>
 public class GroupService: IGroupService
 {
     private readonly HttpClient _client;

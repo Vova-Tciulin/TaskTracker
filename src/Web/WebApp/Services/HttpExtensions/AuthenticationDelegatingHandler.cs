@@ -4,15 +4,21 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace WebApp.Services.HttpExtensions;
 
+
+/// <summary>
+/// Добавляет jwt токен в строку запроса при обращении к микросервисам 
+/// </summary>
 public class AuthenticationDelegatingHandler:DelegatingHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<AuthenticationDelegatingHandler> _logger;
+    private readonly IConfiguration _configuration;
 
-    public AuthenticationDelegatingHandler(IHttpContextAccessor httpContextAccessor, ILogger<AuthenticationDelegatingHandler> logger)
+    public AuthenticationDelegatingHandler(IHttpContextAccessor httpContextAccessor, ILogger<AuthenticationDelegatingHandler> logger, IConfiguration configuration)
     {
         _httpContextAccessor = httpContextAccessor;
         _logger = logger;
+        _configuration = configuration;
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -28,16 +34,16 @@ public class AuthenticationDelegatingHandler:DelegatingHandler
             {
                 tokenResponse = await identityClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest()
                 {
-                    Address = "http://identityserver:80/connect/token",
-                    ClientId = "mvc-client",
-                    ClientSecret = "MVCSecret",
-                    Scope = "taskQueryApi taskCmdApi groupQueryApi groupCmdApi aggregatorsApi",
+                    Address = $"{_configuration["IdentityServerUrl"]}/connect/token",
+                    ClientId = _configuration["ClientConfig:ClientId"],
+                    ClientSecret = _configuration["ClientConfig:ClientSecret"],
+                    Scope = _configuration["ClientConfig:Scope"],
                 });
             }
         
             if (tokenResponse.IsError|| String.IsNullOrEmpty(tokenResponse.AccessToken))
             {
-                _logger.LogCritical($"ошибка при получении токена {tokenResponse.ErrorDescription}");
+                _logger.LogCritical($"failed to get token {tokenResponse.ErrorDescription}");
             }
 
             accessToken = tokenResponse.AccessToken;

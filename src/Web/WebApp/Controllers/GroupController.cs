@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models.Groups;
 using WebApp.Services;
+using WebApp.Services.Group;
 using WebApp.Services.ModelDto.Group;
 
 namespace WebApp.Controllers;
