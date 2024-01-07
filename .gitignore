@@ -260,7 +260,9 @@ paket-files/
 .fake/
 
 # JetBrains Rider
+
 .idea/
+.idea/.idea.TaskTracker/.idea
 *.sln.iml
 pub/
 /src/Web/WebMVC/Properties/PublishProfiles/eShopOnContainersWebMVC2016 - Web Deploy-publish.ps1
@@ -269,8 +271,6 @@ pub/
 
 #Ignore marker-file used to know which docker files we have.
 .eshopdocker_*
-/src/Web/WebMVC/wwwroot/lib
-/src/Web/WebMVC/wwwroot/css/site.min.css
 **/.kube/**
 .mfractor
 
