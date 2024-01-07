@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace Groups.Cmd.Application.Extensions;
 
+/// <summary>
+/// Методы расширения для httpClient
+/// </summary>
 public static class HttpClientExtensions
 {
     public static async Task<T> ReadContentAs<T>(this HttpResponseMessage response)

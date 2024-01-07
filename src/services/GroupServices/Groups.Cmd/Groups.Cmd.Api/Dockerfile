@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/services/GroupServices/Groups.Cmd/Groups.Cmd.Api/Groups.Cmd.Api.csproj", "src/services/GroupServices/Groups.Cmd/Groups.Cmd.Api/"]
 COPY ["src/BuildingBlocks/EventBus.Messages/EventBus.Messages.csproj", "src/BuildingBlocks/EventBus.Messages/"]
-COPY ["src/services/GroupServices/Groups.Cmd.Infrastructure/Groups.Cmd.Infrastructure.csproj", "src/services/GroupServices/Groups.Cmd.Infrastructure/"]
+COPY ["src/services/GroupServices/Groups.Cmd/Groups.Cmd.Infrastructure/Groups.Cmd.Infrastructure.csproj", "src/services/GroupServices/Groups.Cmd/Groups.Cmd.Infrastructure/"]
 COPY ["src/services/GroupServices/Groups.Cmd/Groups.Cmd.Domain/Groups.Cmd.Domain.csproj", "src/services/GroupServices/Groups.Cmd/Groups.Cmd.Domain/"]
 COPY ["src/services/GroupServices/Group.Common/Group.Common.csproj", "src/services/GroupServices/Group.Common/"]
 COPY ["src/services/GroupServices/Groups.Cmd/Groups.Cmd.Application/Groups.Cmd.Application.csproj", "src/services/GroupServices/Groups.Cmd/Groups.Cmd.Application/"]

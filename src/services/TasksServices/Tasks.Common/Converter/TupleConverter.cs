@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Tasks.Common.Converter;
 
+/// <summary>
+/// Json конвертер для сериализации/десериализации List(Guid, Guid)
+/// </summary>
 public class TupleConverter: JsonConverter<List<(Guid, Guid)>>
 {
     public override List<(Guid, Guid)> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

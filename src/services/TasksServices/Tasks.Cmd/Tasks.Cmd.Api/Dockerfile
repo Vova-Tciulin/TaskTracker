@@ -9,7 +9,7 @@ COPY ["src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Api/Tasks.Cmd.Api.csproj",
 COPY ["src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Domain/Tasks.Cmd.Domain.csproj", "src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Domain/"]
 COPY ["src/services/TasksServices/Tasks.Common/Tasks.Common.csproj", "src/services/TasksServices/Tasks.Common/"]
 COPY ["src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Application/Tasks.Cmd.Application.csproj", "src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Application/"]
-COPY ["src/services/Tasks.Cmd.Infrastructure/Tasks.Cmd.Infrastructure.csproj", "src/services/Tasks.Cmd.Infrastructure/"]
+COPY ["src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Infrastructure/Tasks.Cmd.Infrastructure.csproj", "src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Infrastructure/"]
 COPY ["src/BuildingBlocks/EventBus.Messages/EventBus.Messages.csproj","src/BuildingBlocks/EventBus.Messages/"]
 RUN dotnet restore "src/services/TasksServices/Tasks.Cmd/Tasks.Cmd.Api/Tasks.Cmd.Api.csproj"
 COPY . .

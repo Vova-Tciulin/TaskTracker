@@ -1,5 +1,6 @@
 ﻿namespace Groups.Cmd.Api.Extensions;
 
+
 public class ExceptionHandlingMiddleware:IMiddleware
 {
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;

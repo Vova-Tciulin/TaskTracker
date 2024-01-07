@@ -1,5 +1,6 @@
 ﻿namespace Group.Common.Events;
 
+
 public abstract class BaseEvent
 {
     public Guid Id { get; set; }

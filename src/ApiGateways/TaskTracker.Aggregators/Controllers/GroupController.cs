@@ -63,8 +63,9 @@ public class GroupController:ControllerBase
             task.Author = user;
             if (task.WorkerId!=null)
             {
-                task.Worker=task.AuthorId==task.WorkerId?user: groupModel.Users.FirstOrDefault(u => u.Id == task.WorkerId.ToString()) ??
-                                                               await _identityService.GetUserInfoById(task.WorkerId.Value);
+                task.Worker=task.AuthorId==task.WorkerId?
+                    user: groupModel.Users.FirstOrDefault(u => u.Id == task.WorkerId.ToString()) ??
+                          await _identityService.GetUserInfoById(task.WorkerId.Value);
             }
         }
         

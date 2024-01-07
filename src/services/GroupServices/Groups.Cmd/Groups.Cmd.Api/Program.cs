@@ -46,11 +46,13 @@ builder.Services.AddAuthentication("Bearer")
         opt.Authority = builder.Configuration["Services:IdentityServerUrl"];
         opt.Audience = "groupCmdApi";
     });
+
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -35,7 +35,6 @@ builder.Services.AddIdentity<User, IdentityRole>(opt =>
 builder.Services.AddIdentityServer(opt =>
     {
         opt.IssuerUri = "http://localhost:8080";
-        
     })
     .AddInMemoryApiScopes(IdentityConfig.GetApiScope())
     .AddInMemoryApiResources(IdentityConfig.GetApiResources())

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Groups.Cmd.Application.EventSourcingHandlers;
 
+
 public class EventSourcingHandler:IEventSourcingHandler<GroupAggregate>
 {
     private readonly IEventStore _eventStore;
@@ -17,6 +18,9 @@ public class EventSourcingHandler:IEventSourcingHandler<GroupAggregate>
     }
 
 
+    /// <summary>
+    /// сохраняет новые события аггрегата 
+    /// </summary>
     public async Task SaveAsync(AggregateRoot aggregate)
     {
         _logger.LogInformation($"aggregateId: {aggregate.Id}");
@@ -25,6 +29,9 @@ public class EventSourcingHandler:IEventSourcingHandler<GroupAggregate>
         aggregate.MarkUncommittedChanges();
     }
 
+    /// <summary>
+    /// получение событий аггрегата, их воспроизведение и возврат аггрегата
+    /// </summary>
     public async Task<GroupAggregate> GetByIdAsync(Guid aggregateId)
     {
         var taskAggregate = new GroupAggregate();

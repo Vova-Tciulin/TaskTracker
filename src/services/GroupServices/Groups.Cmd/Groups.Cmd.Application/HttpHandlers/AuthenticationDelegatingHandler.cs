@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Groups.Cmd.Application.HttpHandlers;
 
+/// <summary>
+/// Добавляет jwt токен в строку запроса при обращении к микросервисам 
+/// </summary>
 public class AuthenticationDelegatingHandler:DelegatingHandler
 {
     private readonly IConfiguration _configuration;

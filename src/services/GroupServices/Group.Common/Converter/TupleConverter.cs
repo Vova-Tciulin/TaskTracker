@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Group.Common.Converter;
 
+/// <summary>
+/// Json конвертер для сериализации/десериализации List(Guid, Guid)
+/// </summary>
 public class TupleConverter: JsonConverter<List<(Guid, Guid)>>
 {
     public override List<(Guid, Guid)> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -30,7 +33,7 @@ public class TupleConverter: JsonConverter<List<(Guid, Guid)>>
         foreach (var item in value)
         {
             writer.WriteStartArray();
-            writer.WriteStringValue(item.Item1.ToString()); // Преобразование Guid в строку
+            writer.WriteStringValue(item.Item1.ToString()); 
             writer.WriteStringValue(item.Item2.ToString());
             writer.WriteEndArray();
         }

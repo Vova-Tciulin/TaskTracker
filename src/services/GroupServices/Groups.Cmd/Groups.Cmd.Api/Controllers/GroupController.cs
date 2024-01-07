@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Groups.Cmd.Api.Models;
-using Groups.Cmd.Application.Features.Commands.AddUser;
-using Groups.Cmd.Application.Features.Commands.CreateGroup;
-using Groups.Cmd.Application.Features.Commands.RemoveGroup;
-using Groups.Cmd.Application.Features.Commands.RemoveUser;
+using Groups.Cmd.Application.Commands.AddUser;
+using Groups.Cmd.Application.Commands.CreateGroup;
+using Groups.Cmd.Application.Commands.RemoveGroup;
+using Groups.Cmd.Application.Commands.RemoveUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

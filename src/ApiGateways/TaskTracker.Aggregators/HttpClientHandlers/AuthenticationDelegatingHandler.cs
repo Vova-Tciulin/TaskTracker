@@ -4,6 +4,9 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace TaskTracker.Aggregators.HttpClientHandlers;
 
+/// <summary>
+/// Добавляет jwt токен в строку запроса при обращении к микросервисам 
+/// </summary>
 public class AuthenticationDelegatingHandler:DelegatingHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

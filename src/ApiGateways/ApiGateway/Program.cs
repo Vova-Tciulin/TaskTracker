@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
+
+//настройка сервиса аутентификации
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", opt =>
     {

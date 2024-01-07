@@ -4,6 +4,7 @@ using Tasks.Query.Domain.Models;
 
 namespace Tasks.Query.Infrastructure.Data.Configuration;
 
+
 public class TaskConfiguration:IEntityTypeConfiguration<TaskEntity>
 {
     public void Configure(EntityTypeBuilder<TaskEntity> builder)

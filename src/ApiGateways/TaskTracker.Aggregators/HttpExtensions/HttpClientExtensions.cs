@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace TaskTracker.Aggregators.HttpExtensions;
 
+/// <summary>
+/// методы расширения для httpClient 
+/// </summary>
 public static class HttpClientExtensions
 {
     public static async Task<T> ReadContentAs<T>(this HttpResponseMessage response)

@@ -57,47 +57,15 @@ public class IndexModel : PageModel
 
                 if (result.Succeeded)
                 {
-                    /*if (!_roleManager.RoleExistsAsync(Input.RoleName).GetAwaiter().GetResult())
-                    {
-                        var userRole = new IdentityRole
-                        {
-                            Name = Input.RoleName,
-                            NormalizedName = Input.RoleName,
-
-                        };
-                        await _roleManager.CreateAsync(userRole);
-                    }
-                    await _userManager.AddToRoleAsync(user, Input.RoleName);*/
-
-
                     await _userManager.AddClaimsAsync(user, new Claim[] {
                         new Claim(JwtClaimTypes.Name,Input.Email),
                         new Claim(JwtClaimTypes.Email,Input.Email),
                         new Claim(JwtClaimTypes.NickName, Input.NickName)
-                        //new Claim(JwtClaimTypes.Role,Input.RoleName)
+                        
                     });
 
                     return RedirectToPage("Login", returnUrl);
-                    var loginresult = await _signInManager.PasswordSignInAsync(
-                        Input.Email, Input.Password, false, lockoutOnFailure: true);
-
-                    if (loginresult.Succeeded)
-                    {
-                        if (Url.IsLocalUrl(Input.ReturnUrl))
-                        {
-                            return Redirect(Input.ReturnUrl);
-                        }
-                        else if (string.IsNullOrEmpty(Input.ReturnUrl))
-                        {
-                            return Redirect("~/");
-                        }
-                        else
-                        {
-                            throw new Exception("invalid return URL");
-                        }
-
-                    }
-
+                    
                 }
 
             }

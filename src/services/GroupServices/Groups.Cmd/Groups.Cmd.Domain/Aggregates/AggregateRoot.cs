@@ -3,15 +3,14 @@ using Group.Common.Events;
 
 namespace Groups.Cmd.Domain.Aggregates;
 
+
+
 public class AggregateRoot
 {
     protected Guid _id;
     private readonly List<BaseEvent> _changes = new();
     
-    public Guid Id
-    {
-        get { return _id; }
-    }
+    public Guid Id => _id;
 
     public int Version { get; set; } = -1;
 
@@ -27,6 +26,7 @@ public class AggregateRoot
 
     private void ApplyChanges(BaseEvent @event, bool isNew)
     {
+        //находит метод из производного класса для применения события 
         var method = this.GetType().GetMethod("Apply", BindingFlags.Instance | BindingFlags.NonPublic,
             new Type[] { @event.GetType() });
 

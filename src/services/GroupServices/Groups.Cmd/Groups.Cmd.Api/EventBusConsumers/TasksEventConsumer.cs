@@ -1,13 +1,16 @@
 ﻿using System.Text.Json;
 using EventBus.Messages.Messages;
 using Groups.Cmd.Api.Models;
-using Groups.Cmd.Application.Features.Commands.AddTask;
-using Groups.Cmd.Application.Features.Commands.RemoveTask;
+using Groups.Cmd.Application.Commands.AddTask;
+using Groups.Cmd.Application.Commands.RemoveTask;
 using MassTransit;
 using MediatR;
 
 namespace Groups.Cmd.Api.EventBusConsumers;
 
+/// <summary>
+/// Получает события из брокера сообщений и обрабатывает их, вызываея команды 
+/// </summary>
 public class TasksEventConsumer:IConsumer<EventMessage>
 {
     private readonly ILogger<TasksEventConsumer> _logger;

@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Tasks.Cmd.Infrastructure\Tasks.Cmd.Infrastructure.csproj" />
+      <ProjectReference Include="..\Tasks.Cmd.Infrastructure\Tasks.Cmd.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Tasks.Common\Tasks.Common.csproj" />
       <ProjectReference Include="..\Tasks.Cmd.Application\Tasks.Cmd.Application.csproj" />
       <ProjectReference Include="..\Tasks.Cmd.Domain\Tasks.Cmd.Domain.csproj" />
@@ -36,12 +36,6 @@
 
 
     </ItemGroup>
-
-
-
-
-
-
     
 
 </Project>

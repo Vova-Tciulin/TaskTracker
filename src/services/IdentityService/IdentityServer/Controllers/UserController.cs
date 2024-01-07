@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServer.Controllers;
 
+/// <summary>
+/// Возвращает микросервисам информацию о пользователе
+/// ( имя, фамилию, ник) 
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = OidcConstants.AuthenticationSchemes.AuthorizationHeaderBearer)]

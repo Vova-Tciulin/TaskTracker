@@ -4,6 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Groups.Cmd.Application.Behaviours;
 
+/// <summary>
+/// Обработчик валидации комманд перед вызовом их обработчиков
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResponse"></typeparam>
 public class ValidationBehaviour<TRequest,TResponse>:IPipelineBehavior<TRequest, TResponse>
     where TRequest: IRequest<TResponse>
 {
