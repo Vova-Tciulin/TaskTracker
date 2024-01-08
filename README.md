@@ -44,10 +44,8 @@
 docker-compose build
 docker-compose up -d
 ```
-- После запуска всех контейнеров проект будет доступен по следующему URL:
+- После запуска всех контейнеров проект будет доступен по URL: http://localhost:8010/
 
-```http://localhost:8010/
-```
 ## URLs микросервисов: 
 
 - WebApp -> http://localhost:8010/
